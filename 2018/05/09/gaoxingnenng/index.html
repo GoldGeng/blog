@@ -1,0 +1,442 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>读《高性能网站建设指南》 | Hexo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="John Doe">
+    
+    <meta name="description" content="《高性能网站建设指南》中文版出版于 2008 年，是雅虎前端团队在性能方面持续研究的成果。虽然书中内容相对当前的技术栈或多或少存在一些陈旧和不适，但仍是了解前端性能优化的不二入门读物。以前上学的时候，上了年纪的老教师最喜欢讲一句话：万变不离其宗。这是一句放诸四海而皆准的教条，诚不欺我。
+前端性能优化">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/blog/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/blog/img/myLogo.png">
+    <link rel="apple-touch-icon-precomposed" href="/blog/img/myLogo.png">
+    
+
+  
+    <link href="/blog/css/font-awesome.min.css" rel="stylesheet">
+    
+  
+
+    <link rel="stylesheet" href="/blog/css/style.css">
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?d182ed77fc48758bf45a33835ee35745";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+      <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
+
+  _st('install','.............Add your swiftype userID...............');
+</script>
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/blog/" title="Hexo">Hexo</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+                    <ul>
+					 
+						<li><a href="/blog">首页</a></li>
+					
+						<li><a href="/blog/archives">归档</a></li>
+					
+					<li>
+					
+					</li>
+                <!--<li><div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div></li>-->
+
+				</ul>
+			</nav>	
+</div>
+    </header>
+    <div id="container" class="clearfix">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/blog/2018/05/09/gaoxingnenng/" title="读《高性能网站建设指南》" itemprop="url">读《高性能网站建设指南》</a>
+  </h1>
+  <p class="article-time">
+    <time datetime="2018-05-09T07:46:03.000Z" itemprop="datePublished">2018-05-09</time>
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title"></strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP"><span class="toc-number">1.</span> <span class="toc-text">HTTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#减少-HTTP-请求"><span class="toc-number">2.</span> <span class="toc-text">减少 HTTP 请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CDN"><span class="toc-number">3.</span> <span class="toc-text">CDN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Last-Modified-amp-amp-Expires-amp-amp-Cache-control"><span class="toc-number">4.</span> <span class="toc-text">Last-Modified &amp;&amp; Expires &amp;&amp; Cache-control</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#压缩"><span class="toc-number">5.</span> <span class="toc-text">压缩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#浏览器渲染机制"><span class="toc-number">6.</span> <span class="toc-text">浏览器渲染机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#外部脚本和样式"><span class="toc-number">7.</span> <span class="toc-text">外部脚本和样式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-查询"><span class="toc-number">8.</span> <span class="toc-text">DNS 查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#精简"><span class="toc-number">9.</span> <span class="toc-text">精简</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重定向"><span class="toc-number">10.</span> <span class="toc-text">重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ETag"><span class="toc-number">11.</span> <span class="toc-text">ETag</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#参考资料"><span class="toc-number">11.0.0.0.1.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+		</div>
+		
+		<p>《高性能网站建设指南》中文版出版于 2008 年，是雅虎前端团队在性能方面持续研究的成果。虽然书中内容相对当前的技术栈或多或少存在一些陈旧和不适，但仍是了解前端性能优化的不二入门读物。以前上学的时候，上了年纪的老教师最喜欢讲一句话：万变不离其宗。这是一句放诸四海而皆准的教条，诚不欺我。</p>
+<p>前端性能优化，既有宏观方面的考量也有细微之处的锱铢必较。做性能优化的目的不是减少用户下载页面资源的时间，而是减少用户等待页面响应的时间。下面的表格显示了用户对不同延迟时间的心理反馈：</p>
+<p><table></table></p>
+<p><thead></thead></p>
+<p><tr></tr></p>
+<p><th style="text-align:center">延迟时间</th></p>
+<p><th>心理反馈</th><br><br></p>
+<p><tbody></tbody></p>
+<p><tr></tr></p>
+<p><td style="text-align:center">0~16ms</td></p>
+<p><td>屏幕帧速在 60 帧以上，用户感觉不到响应卡顿、跳帧和延迟等现象，用户体验极其优秀</td><br></p>
+<p><tr></tr></p>
+<p><td style="text-align:center">0~100ms</td></p>
+<p><td>程序反应迅速，体验良好，如果响应超过 100ms，用户将会感受到响应不及时</td><br></p>
+<p><tr></tr></p>
+<p><td style="text-align:center">100~300ms</td></p>
+<p><td>用户将会感受到轻微的响应延迟</td><br></p>
+<p><tr></tr></p>
+<p><td style="text-align:center">300~1000ms</td></p>
+<p><td>用户将会感受到渐进式的响应，对于网页来说，加载资源和重绘页面视图都是响应的类型</td><br></p>
+<p><tr></tr></p>
+<p><td style="text-align:center">1000+ms</td></p>
+<p><td>用户将对当前的操作失去耐心和信心</td><br></p>
+<p><tr></tr></p>
+<p><td style="text-align:center">10000+ms</td></p>
+<p><td>用户将会放弃当前的操作，或许也将否定该网站</td><br><br><br><br><a id="more"></a></p>
+<p>下图记录的是当前博客首次加载资源的耗时情况，其中红色标出的地方是页面加载时间，这个时间包含两个部分，上边是总共用时，下边是延迟时间（Latency，等待资源传送的时间），从中可以发现，延迟时间平均占据了总时间的 80%~90%：</p>
+<p><img src="gaoxingnenng/resources-loading-times-2016-04-07.png" alt="resources-loading-times"></p>
+<p>通常来说，改进前端性能所需要的资源和时间，往往要小于后端。后端需要通过重构架构、优化路径、更改硬件、分布化数据库等重操作才能明显改进性能，且优化周期长达数周或数月之久。</p>
+<p>前端性能优化已经被证实是高效和可维护的开发行为，后面将会一一介绍十四条常规的优化规则。相关规则的优化不仅仅限于前端方向，和后端以及网络通信都有一定的联系。</p>
+<h2 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a><a href="#HTTP" title="HTTP"></a>HTTP</h2><p>HTTP 是一种客户端/服务器协议，由请求和响应构成。作为客户端，当浏览器向特定 URL 发送 HTTP 请求后，URL 对应的宿主服务器就会返回 HTTP 响应。该协议以纯文本格式发送信息，请求类型包括：GET、POST、HEAD、DELETE、OPTIONS 和 TRACE。</p>
+<p>我们最常用的是 GET 请求，下面展示了首次请求 <code>pinggod.com/index.html</code> 资源时发送的请求信息和响应信息（状态码、头信息以及响应体）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line"><span class="comment"># Request</span></div><div class="line">GET / HTTP/1.1</div><div class="line">Host: pinggod.com</div><div class="line">Connection: keep-alive</div><div class="line">Pragma: no-cache</div><div class="line">Cache-Control: no-cache</div><div class="line"><span class="comment"># and so on …</span></div><div class="line"></div><div class="line"><span class="comment"># Response</span></div><div class="line">HTTP/1.1 200 OK</div><div class="line">Server: GitHub.com</div><div class="line">Date: Fri, 08 Apr 2016 16:35:38 GMT</div><div class="line">Content-Type: text/html; charset=utf-8</div><div class="line"><span class="comment"># and so on …</span></div></pre></td></tr></table></figure>
+
+<h2 id="减少-HTTP-请求"><a href="#减少-HTTP-请求" class="headerlink" title="减少 HTTP 请求"></a><a href="#减少-HTTP-请求" title="减少 HTTP 请求"></a>减少 HTTP 请求</h2><p>在前图中我们已经看到，每次接收到的 HTTP 响应，有 80%~90% 的时间花在了响应时间上，而不是资源的下载时间，这也就是说，随着 HTTP 请求/响应量的增多，所浪费的时间也就更多，所以，减少 HTTP 请求/响应的数量，将会直接减少资源的响应时间，带来前端页面 50% 以上的响应速度优化。</p>
+<p>下面是一些优化资源首次加载的方法，对于后续页面的浏览，可以使用其他优化规则：</p>
+<ul>
+<li>图片地图，即 HTML 的 <code>&amp;lt;map name=&amp;quot;&amp;quot;&amp;gt;&amp;lt;/map&amp;gt;</code> 标签</li>
+<li>CSS Sprites，使用一张图片集成多个小图片，使用一次请求获取集成后的图片，通过 CSS 属性控制图片的显示，这一技术不仅可以减少 HTTP 请求，还可以减少下载的资源体积，这是因为合并后的图片减少了大量重复性的图片信息，比如颜色表、格式信息等等</li>
+<li>内联图片，即 <code>&amp;lt;img src=&amp;quot;data:[&amp;lt;mediatype&amp;gt;][;base64], &amp;lt;data&amp;gt;&amp;quot; alt=&amp;quot;&amp;quot;&amp;gt;</code>，缺点是 Base64 编码会增加图片的大小，且不能够被缓存</li>
+<li>合并 JavaScript 和 CSS<div class="tip"><br>本文不会涉及 HTTP2 的内容，但是在这里有必要提及的是，HTTP2 的多路复用特性相比于人工维护的 CSS Sprites 等技术具有更高的可维护性和开发效率。<br></div>
+
+</li>
+</ul>
+<h2 id="CDN"><a href="#CDN" class="headerlink" title="CDN"></a><a href="#CDN" title="CDN"></a>CDN</h2><p>内容分发网络（CDN，Content Delivery Networks) 是一组分布在不同地理位置的 Web 服务器，通过就近原则提高资源响应速度。CDN 既能提高性能，还能节省成本。在优化性能时，CDN 可以选择网络阶跃数最小的服务器或响应最短的服务器向用户提供内容。</p>
+<p>除了性能方面的考量，使用 CDN 还可以提供数据备份、扩展存储能力和内容缓存的功能，有助于缓和 Web 峰值流量带来的压力。</p>
+<p>CDN 常用于分发静态资源，比如图片、脚本和样式表，这是因为静态资源具有较少的依赖性。对于地理位置分散的用户，CDN 可以轻易改善资源的响应速度。</p>
+<h2 id="Last-Modified-amp-amp-Expires-amp-amp-Cache-control"><a href="#Last-Modified-amp-amp-Expires-amp-amp-Cache-control" class="headerlink" title="Last-Modified &amp;&amp; Expires &amp;&amp; Cache-control"></a><a href="#Last-Modified-amp-amp-Expires-amp-amp-Cache-control" title="Last-Modified &amp;&amp; Expires &amp;&amp; Cache-control"></a>Last-Modified &amp;&amp; Expires &amp;&amp; Cache-control</h2><p>服务器向客户端发送的响应资源会携带一条 <code>Last-Modified</code> 头信息，用于通知客户端该资源的最新更新时间。当客户端再次请求该资源的时候，为了确定该资源是否有效，就会发起一个条件 GET 请求（Conditional GET Request），该请求携带 <code>If-Modified-Since</code> 头信息，便于服务器验证资源是否过期，如果资源没有过期，则服务器返回 <code>304 Not Modified</code> 状态码并不发送响应体，从而实现更快更轻量的响应。此外，还有 <code>ETag</code> 和 <code>If-None-Match</code> 两种执行条件 GET 请求的方式。</p>
+<p>虽然 <code>Last-Modified / If-Modified-Since</code> 等条件 GET 请求和 304 响应加快了页面响应，但该机制仍在客户端和服务器之间执行了一次请求/响应，以进行有效性检查。针对这一问题，我们可以使用 <code>Expires</code> 头信息来解决，Expires 头信息的值是一个时间戳（timestamp）。当浏览器在时间戳之前再次访问该资源时，会直接从浏览器缓存获取该资源，不会发起任何 HTTP 请求。</p>
+<p>虽然 Expires 头信息消除了 HTTP 校验请求，但也带了新的问题：</p>
+<ul>
+<li>由于它的值是一个特定日期，所以客户端和服务器必须保持严格的时钟同步</li>
+<li>过期日期需要经常校验，且过期后需提供新的时间戳</li>
+</ul>
+<p>针对这一问题，HTTP 1.1 引入了 <code>Cache-Control: max-age=&amp;lt;Integer&amp;gt;</code> 头信息，它的值以秒为单位。在 Cache-Control 允许的时间内，浏览器都会直接从缓存中获取资源。max-age 接收的有效期非常长，甚至长达十年之久。此外，HTTP 规定，当同时存在 max-age 指令和 Expires 头信息时，优先使用 max-age。</p>
+<p>当静态资源被浏览器缓存后，用户如何在缓存有效期内获取修改后的资源呢？首先，不建议缓存 HTML 文档；其次，通过在 HTML 文件中修订资源名的方式通知浏览器获取新的资源。修订资源名的方式多种多样，比如添加时间戳、版本号等。</p>
+<h2 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a><a href="#压缩" title="压缩"></a>压缩</h2><p>客户端在向服务器发送 HTTP 请求时，可以携带 <code>Accept-Encoding</code> 头信息来告知服务器客户端支持哪些压缩格式。服务器在响应信息中使用 <code>Content-Encoding</code> 头信息通知当前资源的压缩格式：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line"><span class="comment"># Request</span></div><div class="line">Accept-Encoding: gzip deflate</div><div class="line"></div><div class="line"><span class="comment"># Response</span></div><div class="line">Content-Encoding: gzip</div></pre></td></tr></table></figure>
+
+<p>压缩需要客户端和服务器耗费额外的 CPU 资源进行解压缩，通常来说，图片和 PDF 都是已经压缩过得资源，无需再次压缩，而脚本和样式表是值得压缩的。</p>
+<p>当浏览器通过代理服务器与资源服务器通信时，由于接入代理服务器的客户端不一定支持相同的压缩格式，甚至不支持压缩格式，所以需要一种机制通知代理服务器向资源服务器请求所有压缩格式（包括未压缩格式）的资源，便于分发给不同的客户端。这一机制就是利用资源服务器向代理服务器发送 <code>Vary</code> 头信息：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line"><span class="comment"># Response</span></div><div class="line">Vary: Accept-Encoding</div></pre></td></tr></table></figure>
+
+<h2 id="浏览器渲染机制"><a href="#浏览器渲染机制" class="headerlink" title="浏览器渲染机制"></a><a href="#浏览器渲染机制" title="浏览器渲染机制"></a>浏览器渲染机制</h2><p>在这一节，本书推荐了两个法则：将样式表置于文档顶部，将脚本置于文档底部。浏览器绘制出首屏内容前，必须完成 DOM 树和 CSS 样式规则的解析，然后合成渲染树，所以，优先加载文档和样式资源就可以加快首屏渲染速度。反之，如果将样式表置于文档底部，则只有加载完样式表之前的所有资源才会加载样式表，直接影响了浏览器合成渲染树绘制首屏内容的流程。</p>
+<p>HTTP 1.1 规范建议浏览器从每个主机名并行地下载两个资源，这也就是说，主机名越多，并行下载量就会越多。但事实上情况并不是这样的，当主机名增多之后，并行解析大量资源会占用大量的 CPU 性能，并增加 DNS 查询时间，更多信息请参考 <a href="http://yuiblog.com/blog/2007/04/11/performance-research-part-4/" target="_blank" rel="noopener">Maximizing Parallel Downloads in the Carpool Lane</a> 一文。</p>
+<p>将脚本置于文档底部，有两个直接原因：</p>
+<ul>
+<li>脚本会阻塞后面文档内容的渲染</li>
+<li>脚本资源会阻塞其他资源的并行加载<blockquote>
+<p>浏览器之所以存在这样的机制，是因为 JavaScript 缺乏模块机制，如果不同的 JavaScript 之间存在依赖关系，就必须优先加载依赖脚本。对此可能还存在其他原因，此处留待修改。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="外部脚本和样式"><a href="#外部脚本和样式" class="headerlink" title="外部脚本和样式"></a><a href="#外部脚本和样式" title="外部脚本和样式"></a>外部脚本和样式</h2><p>将脚本和样式以独立资源的形式存储和获取，便于在多个页面之间进行复用，尤其是配合 CDN、浏览器缓存的情况下，性能优化效果巨大。</p>
+<p>抛开性能方面的考量，将脚本和样式表从文档中独立出来，也有助于提高可读性和可维护性。</p>
+<p>这一规则并不是绝对的，比如对于浏览器主页来说，它们的访问量大、组件复用率低，通常用户的第二次跳转都是其他的网站。</p>
+<h2 id="DNS-查询"><a href="#DNS-查询" class="headerlink" title="DNS 查询"></a><a href="#DNS-查询" title="DNS 查询"></a>DNS 查询</h2><p>IP 地址和域名的关系就像是电话本中的电话号码和联系人姓名，DNS 是一套帮助浏览器根据域名查找 IP 地址的系统。DNS 查询也会占用时间，通常浏览器查找一个特定主机名的 IP 需要花费 20~120ms 的时间。</p>
+<p>就像对待静态资源一样，浏览器也可以缓存 DNS 数据，便于再次查找某个主机名时，短时间内不再进行 DNS 查询。查询到的 DNS 记录通常包含 TTL（Time-to-live，存活时间），用于告知客户端该记录的缓存时长。操作系统会考虑 TTL 的值，但浏览器并不会，它有自己的时间限制，此外，浏览器对 DNS 记录的数量也有限制，好在即使浏览器的 DNS 记录丢了，还可以使用操作系统缓存的记录。</p>
+<p>持久连接（Persisent Connection）可以让浏览器在单一连接上发送多个请求，避免了重复创建 socket 连接的低效问题。浏览器和服务器都是通过发送 <code>Connection: Keep-Alive</code> 头信息来表示持久连接，发送 <code>Connection: close</code> 来关闭持久连接：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line"><span class="comment"># Request &amp;&amp; Response</span></div><div class="line">Connection: keep-alive</div><div class="line"></div><div class="line"><span class="comment"># Close Persisent Connection</span></div><div class="line">Connection: close</div></pre></td></tr></table></figure>
+
+<p>当浏览器和服务器之间是持久连接时，没有理由进行 DNS 查询。<code>Connection: keep-alive</code> 连接可以同时覆盖 TTL 和浏览器的对 DNS 记录的时间限制。</p>
+<p>之前提过，增加主机名可以增加并行下载量，但也会增加 DNS 查询，两相权衡取其轻，最好不要少于两个主机名，也不要大于四个主机名。</p>
+<h2 id="精简"><a href="#精简" class="headerlink" title="精简"></a><a href="#精简" title="精简"></a>精简</h2><p>这里涉及三个名词：压缩、精简和混淆。压缩的原理是根据重复字节创建一个词典，缩减重复的字节；精简的原理是去除代码中无关的内容，比如注释、空白等；混淆常使用较短的名称替换变量名、函数名。</p>
+<h2 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a><a href="#重定向" title="重定向"></a>重定向</h2><p>重定向（Redirect）用于将用户从一个 URL 重新定位到另一个 URL，常见的重定向方式包括：</p>
+<ul>
+<li>使用 meta refresh 标签重定向</li>
+<li>使用 JavaScript <code>document.location</code> 重定向</li>
+<li>使用 3XX HTTP 状态码重定向（优先推荐），比如 301（Moved Permancently）和 302 （Moved Temporarily）</li>
+</ul>
+<p>重定向的存在具有必要性，比如：</p>
+<ul>
+<li>跟踪内部流量，通过分析服务器的重定向数量获取流量流动方向</li>
+<li>跟踪出站流量，搜索引擎可以使用查询字符串 <code>?url=http%3a//pinggod.com</code> 记录出站流量，通过分析该查询字符串即可计算出与出站目标有关的信息，此外还可以使用信标（beacon）的方式，即监听点击事件，在点击外链时向服务器请求数据，间接驱动服务器记录跳转信息</li>
+<li>美化 URL，便于用户记忆<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="comment">// Beacon</span></div><div class="line"><span class="keyword">var</span> b;</div><div class="line"><span class="keyword">var</span> handleClick = <span class="function"><span class="keyword">function</span> (<span class="params">a</span>) </span>&#123;</div><div class="line">    b = <span class="keyword">new</span> Image();</div><div class="line">    b.src = <span class="string">“<a href="http://rds.yahoo.com/?url=&quot;" target="_blank" rel="noopener">http://rds.yahoo.com/?url=&quot;</a></span> + <span class="built_in">escape</span>(a.href);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="ETag"><a href="#ETag" class="headerlink" title="ETag"></a><a href="#ETag" title="ETag"></a>ETag</h2><p>ETag（Entity Tag，实体标签），是服务器和客户端确认缓存资源有效性的机制。服务器会使用一个字符串来标识某个特定版本的资源，这个字符串就是 ETag 的值。如果浏览器要验证缓存，就会使用 <code>If-Node-Match</code> 头信息将 ETag 传回服务器，如果在服务器校验成功，则返回 304 状态码。</p>
+<p>ETag 的问题在于，对于不同的服务器来说，相同版本的资源可能具有不同的 ETag 值。此外，根据 HTTP 1.1 的规定，如果请求中同时出现了 If-None-Match 和 If-modified-Since 头信息，则 If-None-Match 具有更高的优先级，除非这两个头信息在服务器和客户端保持完全一致，否则禁止传回 304 响应。</p>
+<h6 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a><a href="#参考资料" title="参考资料"></a>参考资料</h6><ul>
+<li><a href="https://book.douban.com/subject/3132277/" target="_blank" rel="noopener">高性能网站建设指南</a></li>
+<li><a href="http://www.html5rocks.com/zh/tutorials/internals/howbrowserswork/" target="_blank" rel="noopener">How browser works?</a></li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2018/05/09/gaoxingnenng/" data-title="读《高性能网站建设指南》 | Hexo" data-tsina="" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/blog/2018/05/09/Throttle and Debounce/" title="Throttle and Debounce">
+  <strong>New:</strong><br/>
+  <span>
+  Throttle and Debounce</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/blog/2018/05/09/js/"  title="JavaScript 常见问题和解决方式">
+ <strong>Old:</strong><br/> 
+ <span>JavaScript 常见问题和解决方式
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	
+	<div class="ds-thread" data-title="读《高性能网站建设指南》" data-thread-key="gaoxingnenng" data-author-key="John Doe" data-url="http://yoursite.com/post/gaoxingnenng"></div>
+	
+</section>
+
+
+</div>  
+    </div>
+    <footer><div id="footer" >
+	<div class="copyright">
+		<span>Powered by <a href="https://github.com/hexojs/hexo">Hexo</a> and theme by 
+		<a href="https://github.com/levonlin/Tinnypp">Tinnypp</a>.</span>
+		
+			<span>© GoldGeng</span>
+		
+	<div>
+</div></footer>
+    <script src="/blog/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  //back to top
+  function backToTop(){
+    var buttonHTML = $("<a href=\"#top\" id=\"back-top\">" + "<span>Back to Top</span></a>");
+    buttonHTML.appendTo($("body"));
+    var buttonToTop = $("#back-top");
+    // hide #back-top first
+    buttonToTop.hide();
+
+    // fade in #back-top
+    $(function() {
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                buttonToTop.fadeIn();
+            } else {
+                buttonToTop.fadeOut();
+            }
+        });
+        // scroll body to 0px on click
+        buttonToTop.click(function() {
+            $('body,html').animate({
+                scrollTop: 0
+            }, 800);
+            return false;
+        });
+    });
+  }
+  backToTop();
+
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      ta = $('#toc.toc-aside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+        
+    }
+  });
+
+  var show = true;
+  c.click(function(){
+    if(show == true){
+        a.addClass('fadeOut').css('display', 'none');
+        ta.css('display', 'block').addClass('fadeIn');
+        m.addClass('moveMain');  
+    }else{
+        a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');     
+        ta.css('display', 'none'); 
+        m.removeClass('moveMain');
+        $('#toc.toc-aside').css('display', 'none');
+    }
+    show = !show;
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,240-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tinnypp"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';    //change to ds.src = '/blog/js/embed.js'; to add useragent for duoshuo
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+<script type="text/javascript">
+  function footerPosition() {
+    var contentHeight = document.documentElement.scrollHeight,
+        winHeight = window.innerHeight;
+    if(contentHeight <= winHeight) {
+      $('footer').addClass('fixed-bottom');
+    } else {
+      $('footer').removeClass('fixed-bottom');
+    }
+  }
+  footerPosition();
+  $(window).resize(footerPosition);
+</script>
+
+
+  </body>
+</html>

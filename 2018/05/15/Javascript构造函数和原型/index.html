@@ -1,0 +1,756 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Javascript构造函数和原型 | Hexo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="John Doe">
+    
+    <meta name="description" content="相信你已经知道了，Javascript函数也可以作为对象构造器。比如，为了模拟面向对象编程中的Class，可以用如下的代码
+function Person(name){
+    this.name = name
+}
+`&amp;lt;/pre&amp;gt;
+ 注意：我不使用分号因为我是个异教徒！ 
+ 不管怎么说，">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/blog/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/blog/img/myLogo.png">
+    <link rel="apple-touch-icon-precomposed" href="/blog/img/myLogo.png">
+    
+
+  
+    <link href="/blog/css/font-awesome.min.css" rel="stylesheet">
+    
+  
+
+    <link rel="stylesheet" href="/blog/css/style.css">
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?d182ed77fc48758bf45a33835ee35745";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+      <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
+
+  _st('install','.............Add your swiftype userID...............');
+</script>
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/blog/" title="Hexo">Hexo</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+                    <ul>
+					 
+						<li><a href="/blog">首页</a></li>
+					
+						<li><a href="/blog/archives">归档</a></li>
+					
+					<li>
+					
+					</li>
+                <!--<li><div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div></li>-->
+
+				</ul>
+			</nav>	
+</div>
+    </header>
+    <div id="container" class="clearfix">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/blog/2018/05/15/Javascript构造函数和原型/" title="Javascript构造函数和原型" itemprop="url">Javascript构造函数和原型</a>
+  </h1>
+  <p class="article-time">
+    <time datetime="2018-05-15T10:25:56.000Z" itemprop="datePublished">2018-05-15</time>
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title"></strong>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#方法"><span class="toc-number">1.</span> <span class="toc-text">方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原型和继承"><span class="toc-number">2.</span> <span class="toc-text">原型和继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在原型上创建方法"><span class="toc-number">3.</span> <span class="toc-text">在原型上创建方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Apply-amp-Call"><span class="toc-number">4.</span> <span class="toc-text">Apply &amp; Call</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#new方法"><span class="toc-number">5.</span> <span class="toc-text">new方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
+		</div>
+		
+		<p>相信你已经知道了，Javascript函数也可以作为对象构造器。比如，为了模拟面向对象编程中的<code>Class</code>，可以用如下的代码</p>
+<pre><code>function Person(name){
+    this.name = name
+}
+`&lt;/pre&gt;
+</code></pre><p> <em>注意：我不使用分号因为我是个异教徒！ </em></p>
+<p> 不管怎么说，你现在有了一个<code>function</code>，你可以使用<code>new</code>操作符来创建一个<code>Person</code></p>
+<pre><code>&lt;pre&gt;`var bob = new Person(&apos;Bob&apos;)
+// {name: &apos;Bob&apos;}
+`&lt;/pre&gt;
+</code></pre><p> 为了确认<code>bob</code>确实是一个<code>Person</code>，可以这么做</p>
+<pre><code>&lt;pre&gt;`bob instanceof Person
+// true
+`&lt;/pre&gt;
+</code></pre><p> 你同样可以把<code>Person</code>作为一个普通函数调用——不使用<code>new</code></p>
+<pre><code>&lt;pre&gt;`Person(&apos;Bob&apos;)
+// undefined
+`&lt;/pre&gt;
+</code></pre><p> 但是这里会返回<code>undefined</code>.同时，你在不经意间创建了一个全局变量<code>name</code>，这可不是你想要的。</p>
+<pre><code>&lt;pre&gt;`name
+// &apos;Bob&apos;
+`&lt;/pre&gt;
+</code></pre><p> 嗯…这一点也不好，特别是如果你已经有一个名为<code>name</code>的全局变量，那么它将会被覆盖。这是因为你直接调用了一个函数(不适用<code>new</code>)，<code>this</code>对象被设置为<em>全局对象</em>——在浏览器中，就是<code>window</code>对象。</p>
+<pre><code>&lt;pre&gt;`window.name
+// &apos;Bob&apos;
+this === window
+// true
+`&lt;/pre&gt;
+</code></pre><p> 所以…如果你想写一个构造器函数，那么就用构造器的方式使用它(使用<code>new</code>)，如果你想写一个普通函数，那么就以函数的方式使用它(直接调用)，不要相互混淆。</p>
+<blockquote>
+<p>注：一个较好的代码习惯就是，构造器函数首字母大写，普通函数首字母小写。如<code>function Person(){}</code>是一个构造器函数，<code>function showMsg(){}</code>是一个普通函数。</p>
+</blockquote>
+<p>  有些人也许会指出，可以使用一个小技巧避免污染全局变量。</p>
+<pre><code>&lt;pre&gt;`function Person(name){
+    if (!(this instanceof Person))
+        return new Person(name)
+    this.name = name
+}
+`&lt;/pre&gt;
+</code></pre><p> 这段代码做了三件事</p>
+<ol>
+<li>检查<code>this</code>对象是否是<code>Person</code>的实例——如果使用<code>new</code>操作符的话就是。</li>
+<li>如果它确实是<code>Person</code>的实例，执行原有的代码。</li>
+<li><p>如果它不是<code>Person</code>的实例，使用<code>new</code>操作符创建一个<code>Person</code>的实例——这才是正确的使用姿势，然后返回它。</p>
+<p>这就允许使用函数形式调用构造器函数，返回一个<code>Person</code>对象，不会污染全局命名空间。</p>
+<pre>`Person('Bob')
+// {name: 'Bob'}
+name
+// undefined
+`</pre>
+
+<p>神奇的是使用<code>new</code>操作符同样可行</p>
+<pre>`new Person('Bob')
+// {name: 'Bob'}
+`</pre>
+
+<p>为什么呢？这是因为当你使用new操作符创建一个对象时，如果你在构造函数里面主动返回一个对象，那么new表达式的值就是这个返回的对象；如果没有主动返回，那么构造函数会默认返回<code>this</code>。但是，你可能会想，我可不可以返回一个非<code>Person</code>对象呢？这就有点像欺诈了~</p>
+<pre>`function Cat(name){
+    this.name = name
+}
+function Person(name){
+    return new Cat(name)
+}
+var bob = new Person('Bob')
+bob instanceof Person
+// false
+bob instanceof Cat
+// true
+`</pre>
+
+<p>所以，我创建一个<code>Person</code>结果我得到了一个<code>Cat</code>？好吧，在Javascript中这确实可能发生。你甚至可以返回一个<code>Array</code></p>
+<pre>`function Person(name){
+    return [name]
+}
+new Person('Bob')
+// ['Bob']
+`</pre>
+
+<p>但是这有一个限制，如果你返回一个<strong>原始数据类型</strong>，返回值将不起作用。</p>
+<pre>`function Person(name){
+    this.name = name
+    return 5
+}
+new Person('Bob')
+// {name: 'Bob'}
+`</pre>
+
+<p><code>Number</code>,<code>String</code>,<code>Boolean</code>，都是原始数据类型。</p>
+<p>如果你在构造器函数里面返回这些类型的值，那么它将会被忽略，构造器将按照正常情况，返回<code>this</code>对象。</p>
+<blockquote>
+<p>注：原始数据类型还包含<code>undefined</code>和<code>null</code>。但如果你使用<code>new</code>操作符创建原始数据类型，它将会是一个对象</p>
+</blockquote>
+<pre>`typeof (new String('hello')) === 'object' // true
+typeof (String('hello')) === 'string' // true
+`</pre>
+
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p>在最开始的时候我，我说过函数也可以作为构造器，事实上，它更像身兼三职。函数同样可以作为_方法_。</p>
+<p>如果你了解面向对象编程的话，你会知道方法是对象的行为——描述对象可以做什么。在Javascript中，方法就是链接到对象上的函数——你可以通过创建一个函数并把它赋值到对象上，来创建对象的方法。</p>
+<pre>`function Person(name){
+    this.name = name
+    this.sayHi = function(){
+        return 'Hi, I am ' + this.name
+    }
+}
+`</pre>
+
+<p>Bob现在可以say Hi了！</p>
+<pre>`var bob = new Person('Bob')
+bob.sayHi()
+// 'Hi, I am Bob'
+`</pre>
+
+<p>事实上，我们可以脱离构造函数，创建对象的方法</p>
+<pre>`var bob = {name: 'Bob'} // this is a Javascript object!
+bob.sayHi = function(){
+    return 'Hi, I am ' + this.name
+}
+`</pre>
+
+<p>这同样可行。或者，如果你喜欢的话，把它写成一个更大的object</p>
+<pre>`var bob = {
+    name: 'Bob',
+    sayHi: function(){
+        return 'Hi, I am ' + this.name
+    }
+}
+`</pre>
+
+<p>所以，我们为什么还需要构造函数呢？答案是继承。</p>
+<h3 id="原型和继承"><a href="#原型和继承" class="headerlink" title="原型和继承"></a>原型和继承</h3><p>好吧，我们谈谈继承。你肯定知道继承，对吧？比如在Java中，你可以让一个类继承另一个类，就可以自动<strong>得到</strong>所有父类的方法和变量了。</p>
+<pre>`public class Mammal{
+    public void breathe(){
+        // do some breathing
+    }
+}
+public class Cat extends Mammal{
+    // now cat too can breathe!
+}
+`</pre>
+
+<p>那么，在Javascript中，我们可以做同样的事情，只是有些不同。首先，我们甚至没有类！取而代之的是<code>prototype</code>。下面就是与Java代码等价的Javascript代码。</p>
+<pre>`function Mammal(){
+}
+Mammal.prototype.breathe = function(){
+    // do some breathing
+}
+function Cat(){
+}
+Cat.prototype = new Mammal()
+Cat.prototype.constructor = Cat
+// now cat too can breathe!
+`</pre>
+
+<p>Javascript不同于传统的面向对象语言，它使用<em>原型继承</em>。简而言之，原型继承的工作原理如下：</p>
+</li>
+<li><p>一个对象有许多属性，包含普通属性和函数。</p>
+</li>
+<li>一个对象有一个特殊的父属性，它也被称为这个对象的原型，用<code>__proto__</code>表示。这个对象可以继承它父对象的所有属性。</li>
+<li>一个对象可以通过在自身设置属性，重写父对象的的<em>同名属性</em></li>
+<li>构造器用于创建对象。每一个构造器都有一个相关联的<code>prototype</code>对象，它其实也是一个普通对象。</li>
+<li><p>创建一个对象时，该对象的父对象(<code>__proto__</code>)被设置为创建它的构造器的<code>prototype</code>对象。</p>
+<p>好的！现在你应该明白原型继承是怎么一回事了，接下来我们一行一行看<code>Cat</code>这个例子</p>
+<p>首先，我们创建了一个构造器<code>Mammal</code></p>
+<pre>`function Mammal(){
+}
+`</pre>
+
+<p>这时候，<code>Mammal</code>已经有了一个<code>prototype</code>属性</p>
+<pre>`Mammal.prototype
+// {}
+`</pre>
+
+<p>我们创建一个实例</p>
+<pre>`var mammal = new Mammal()
+`</pre>
+
+<p>现在，我们验证一下上面提到的第2条</p>
+<pre>`mammal.__proto__ === Mammal.prototype
+// true
+`</pre>
+
+<p>接下来，我们在<code>Mammal</code>的<code>prototype</code>属性上增加一个方法<code>breathe</code></p>
+<pre>`Mammal.prototype.breathe = function(){
+    // do some breathing
+}
+`</pre>
+
+<p>这时候，实例<code>mammal</code>就可以调用breathe了</p>
+<pre>`mammal.breathe()
+`</pre>
+
+<p>因为它从<code>Mammal.prototype</code>继承过来。往下</p>
+<pre>`function Cat(){
+}
+Cat.prototype = new Mammal()
+`</pre>
+
+<p>我们创建了一个<code>Cat</code>构造器，设置<code>Cat.prototype</code>为<code>Mammal</code>的实例。为什么要这么做呢？</p>
+<pre>`var garfield = new Cat()
+garfield.breathe()
+`</pre>
+
+<p>现在所有的cat实例都继承自<code>Mammal</code>，所以它也能够调用<code>breathe</code>方法，往下</p>
+<pre>`Cat.prototype.constructor = Cat
+`</pre>
+
+<p>确保cat确实是<code>Cat</code>的实例</p>
+<pre>`garfield.__proto__ === Cat.prototype
+// true
+Cat.prototype.constructor === Cat
+// true
+garfield instanceof Cat
+// true
+`</pre>
+
+<p>每当你创建一个<code>Cat</code>的实例，你就会创建一个二级原型链，即<code>garfield</code>是<code>Cat.prototype</code>的子对象，而<code>Cat.prototype</code>为<code>Mammal</code>的实例，所以也是<code>Mammal.prototype</code>的子对象。</p>
+<p>那么，<code>Mammal.prototype</code>的父对象是谁呢？没错，你也许猜到了，那就是<code>Object.prototype</code>。所以，实际上是三级原型链。</p>
+<blockquote>
+<p>garfield -&gt; Cat.prototype -&gt; Mammal.prototype -&gt; Object.prototype</p>
+</blockquote>
+<p>你可以在<code>garfield</code>的父对象上增加属性，然后<code>garfield</code>就可以神奇的访问到这些属性，即使在<code>garfield</code>对象创建之后！</p>
+<pre>`Cat.prototype.isCat = true
+Mammal.prototype.isMammal = true
+Object.prototype.isObject = true
+garfield.isCat // true
+garfield.isMammal // true
+garfield.isObject // true
+`</pre>
+
+<p>你也可以知道它是否有某个属性</p>
+<pre>`'isMammal' in garfield
+// true
+`</pre>
+
+<p>并且你也可以区分自身的属性和继承而来的属性</p>
+<pre>`garfield.name = 'Garfield'
+garfield.hasOwnProperty('name')
+// true
+garfield.hasOwnProperty('breathe')
+// false
+`</pre>
+
+<h3 id="在原型上创建方法"><a href="#在原型上创建方法" class="headerlink" title="在原型上创建方法"></a>在原型上创建方法</h3><p>现在你应该理解了原型继承的原理，让我们回到第一个例子</p>
+<pre>`function Person(name){
+    this.name = name
+    this.sayHi = function(){
+        return 'Hi, I am ' + this.name
+    }
+}
+`</pre>
+
+<p>直接在对象上定义方法是一种低效率的方式。一个更好的方法是在<code>Person.prototype</code>上定义方法。</p>
+<pre>`function Person(name){
+    this.name = name
+}
+Person.prototype.sayHi = function(){
+    return 'Hi, I am ' + this.name
+}
+`</pre>
+
+<p>为什么这种方式更好？</p>
+<p>在第一种方式中，每当我们创建一个<code>person</code>对象，一个新的<code>sayHi</code>方法就要被创建，而在第二种方式中，只有一个<code>sayHi</code>方法被创建了，并且在所有<code>Person</code>的实例中共享——这是因为<code>Person.prototype</code>是它们的父对象。所以，在<code>prototype</code>上创建方法会更加高效。</p>
+<h3 id="Apply-amp-Call"><a href="#Apply-amp-Call" class="headerlink" title="Apply &amp; Call"></a>Apply &amp; Call</h3><p>正如你所见，函数凭借添加到对象上而成为了一个对象的方法，那么这个函数内的<code>this</code>指针应该始终指向这个对象，不是么?事实并不是这样。我们看看之前的例子。</p>
+<pre>`function Person(name){
+    this.name = name
+}
+Person.prototype.sayHi = function(){
+    return 'Hi, I am ' + this.name
+}
+`</pre>
+
+<p>你创建两个<code>Person</code>对象，<code>jack</code>和<code>jill</code></p>
+<pre>`var jack = new Person('Jack')
+var jill = new Person('Jill')
+jack.sayHi()
+// 'Hi, I am Jack'
+jill.sayHi()
+// 'Hi, I am Jill'
+`</pre>
+
+<p>在这里，<code>sayHi</code>方法不是添加在<code>jack</code>或者<code>jill</code>对象上的，而是添加在他们的原型对象上：<code>Person.prototype</code>。那么，<code>sayHi</code>方法如何知道<code>jack</code>和<code>jill</code>的名字呢？</p>
+<blockquote>
+<p>答案：<code>this</code>指针没有绑定到任何对象上，直到函数被调用时才进行绑定。</p>
+</blockquote>
+<p>当你调用<code>jack.sayHi()</code>时，<code>sayHi</code>的<code>this</code>指针就会绑定到jack上；当你调用<code>jill.sayHi()</code>是，它则会绑定到<code>jill</code>上。但是，绑定<code>this</code>对象不改变方法本身——它还是同样的一个函数！</p>
+<p>你同样可以为一个方法指定所要绑定的this指针的对象。</p>
+<pre>`function sing(){
+    return this.name + ' sings!'
+}
+sing.apply(jack)
+// 'Jack sings!'
+`</pre>
+
+<p><code>apply</code>方法属于<code>Function.prototype</code>(没错，函数也是一个对象并且有<code>prototypes</code>和自身的属性!)。所以，你可以在任何函数中使用<code>apply</code>方法绑定<code>this</code>指针为指定的对象，即使这个函数没有添加到这个对象上。事实上，你甚至可以绑定<code>this</code>指针为不同的对象。</p>
+<pre>`function Flower(name){
+    this.name = name
+}
+var tulip = new Flower('Tulip')
+jack.sayHi.apply(tulip)
+// 'Hi, I am Tulip'
+`</pre>
+
+<p>你可能会说</p>
+<blockquote>
+<p>等等，郁金香怎么会说话呢！</p>
+</blockquote>
+<p>我可以回答你</p>
+<blockquote>
+<p>任何人是任何事，任何事是任何人，颤抖吧人类@_@</p>
+</blockquote>
+<p>只要这个对象有一个<code>name</code>属性，<code>sayHi</code>方法就会很乐意把它打印出。这就是<strong>鸭子类型</strong>准则</p>
+<blockquote>
+<p>如果一个东西像鸭子一样嘎嘎叫，并且它走起来像鸭子一样，对我来说它就是鸭子！</p>
+</blockquote>
+<p>那么回到<code>apply</code>函数：如果你想使用<code>apply</code>传递参数，你可以把它们构造成一个数组作为第二个参数。</p>
+<pre>`function singTo(other){
+    return this.name + ' sings for ' + other.name
+}
+singTo.apply(jack, [jill])
+// 'Jack sings for Jill'
+`</pre>
+
+<p><code>Function.prototype</code>也有<code>call</code>函数，它和<code>apply</code>函数非常相似，唯一的区别就是<code>call</code>函数依次把参数列在末尾传递，而<code>apply</code>函数接收一个数组作为第二个参数。</p>
+<pre>`sing.call(jack, jill)
+// 'Jack sings for Jill'
+`</pre>
+
+<h3 id="new方法"><a href="#new方法" class="headerlink" title="new方法"></a>new方法</h3><p>现在，有趣的事情来了。</p>
+<p>当你想调用一个有若干个参数的函数时，<code>apply</code>方法十分的方便。比如，<code>Math.max</code>方法接受若干个number参数</p>
+<pre>`Math.max(4, 1, 8, 9, 2)
+// 9
+`</pre>
+
+<p>这很好，但是不够抽象。我们可以使用<code>apply</code>获取到任意数组的最大值。</p>
+<pre>`Math.max.apply(Math, myarray)
+`</pre>
+
+<p>这有用多了！</p>
+<p>既然<code>apply</code>这么有用，你可能会在很多地方想使用它，比起</p>
+<pre>`Math.max.apply(Math, args)
+`</pre>
+
+<p>你可能更想在构造器函数中使用</p>
+<pre>`new Person.apply(Person, args)
+`</pre>
+
+<p>遗憾的是，这不起作用。它会认为你把<code>Person.apply</code>整体当做了构造函数。那么这样呢？</p>
+<pre>`(new Person).apply(Person, args)
+`</pre>
+
+<p>这同样也不起作用，因为他会首先创建一个<code>person</code>对象，然后在尝试调用<code>apply</code>方法。</p>
+<p>怎么办呢？<a href="https://link.jianshu.com?t=http://stackoverflow.com/questions/813383/how-can-i-construct-an-object-using-an-array-of-values-for-parameters-rather-th#answer-813401" target="_blank" rel="noopener">StackOverflow</a>上的这个回答是个好主意</p>
+<p>我们可以在<code>Function.prototype</code>上创建一个new方法</p>
+<pre>`Function.prototype.new = function(){
+    var args = arguments
+    var constructor = this
+    function Fake(){
+         constructor.apply(this, args)
+    }
+    Fake.prototype = constructor.prototype
+    return new Fake
+}
+`</pre>
+
+<p>这样，所有的构造器函数都有一个<code>new</code>方法</p>
+<pre>`var bob = Person.new('Bob')
+`</pre>
+
+<p>我们分析一下<code>new</code>方法的原理</p>
+<p>首先</p>
+<pre>`var args = arguments
+var constructor = this
+function Fake(){
+     constructor.apply(this, args)
+}
+`</pre>
+
+<p>我们创建了一个<code>Fake</code>构造器，在<code>constructor</code>上调用apply方法。在<code>new</code>方法的上下文中，<code>this</code>对象指的就是真实的构造器函数——我们把它保存在<code>constructor</code>变量中，同样的，我们也把<code>new</code>方法上下文的<code>arguments</code>保存在<code>args</code>变量中，以便在<code>Fake</code>构造器中使用。往下</p>
+<pre>`Fake.prototype = constructor.prototype
+`</pre>
+
+<p>我们设置<code>Fake.prototype</code>为原来的构造器的<code>prototype</code>。因为<code>constructor</code>指向的还是原始的构造函数，他的<code>prototype</code>属性还是原来的。所以通过<code>Fake</code>创建的对象还是原来的构造器函数的实例。最后</p>
+<pre>`return new Fake
+`</pre>
+
+<p>使用<code>Fake</code>构造器创建一个新对象并返回。</p>
+<p>明白了么？第一次不明白没关系，多看几遍就能理解了！</p>
+<p>总而言之，现在我们可以干一些很酷的事情了。</p>
+<pre>`var children = [new Person('Ben'), new Person('Dan')]
+var args = ['Bob'].concat(children)
+var bob = Person.new.apply(Person, args)
+`</pre>
+
+<p>很好！为了不写两遍Person，我们可以添加一个辅助方法</p>
+<pre>`Function.prototype.applyNew = function(){
+     return this.new.apply(this, arguments)
+}
+`</pre>
+
+<p>现在你可以这样使用</p>
+<p><pre>`var bob = Person.applyNew(args)</pre></p>
+</li>
+</ol>
+<p>这就展示了Javascript是一门灵活的语言。即使它有些使用方法不是你想要的，你也可以模拟去做。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这篇文章到这里就结束了，我们学习了</p>
+<ol>
+<li>Constructors构造器</li>
+<li>Methods and Prototypes方法和原型</li>
+<li><p><code>apply</code> &amp; <code>call</code></p>
+</li>
+<li><p>实现一个<code>new</code>方法</p>
+</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2018/05/15/Javascript构造函数和原型/" data-title="Javascript构造函数和原型 | Hexo" data-tsina="" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/blog/2018/05/17/前端面试题一/" title="前端面试题一">
+  <strong>New:</strong><br/>
+  <span>
+  前端面试题一</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/blog/2018/05/15/extend/"  title="Javascript扩展对象extend实现">
+ <strong>Old:</strong><br/> 
+ <span>Javascript扩展对象extend实现
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	
+	<div class="ds-thread" data-title="Javascript构造函数和原型" data-thread-key="Javascript构造函数和原型" data-author-key="John Doe" data-url="http://yoursite.com/post/Javascript构造函数和原型"></div>
+	
+</section>
+
+
+</div>  
+    </div>
+    <footer><div id="footer" >
+	<div class="copyright">
+		<span>Powered by <a href="https://github.com/hexojs/hexo">Hexo</a> and theme by 
+		<a href="https://github.com/levonlin/Tinnypp">Tinnypp</a>.</span>
+		
+			<span>© GoldGeng</span>
+		
+	<div>
+</div></footer>
+    <script src="/blog/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  //back to top
+  function backToTop(){
+    var buttonHTML = $("<a href=\"#top\" id=\"back-top\">" + "<span>Back to Top</span></a>");
+    buttonHTML.appendTo($("body"));
+    var buttonToTop = $("#back-top");
+    // hide #back-top first
+    buttonToTop.hide();
+
+    // fade in #back-top
+    $(function() {
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                buttonToTop.fadeIn();
+            } else {
+                buttonToTop.fadeOut();
+            }
+        });
+        // scroll body to 0px on click
+        buttonToTop.click(function() {
+            $('body,html').animate({
+                scrollTop: 0
+            }, 800);
+            return false;
+        });
+    });
+  }
+  backToTop();
+
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      ta = $('#toc.toc-aside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+        
+    }
+  });
+
+  var show = true;
+  c.click(function(){
+    if(show == true){
+        a.addClass('fadeOut').css('display', 'none');
+        ta.css('display', 'block').addClass('fadeIn');
+        m.addClass('moveMain');  
+    }else{
+        a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');     
+        ta.css('display', 'none'); 
+        m.removeClass('moveMain');
+        $('#toc.toc-aside').css('display', 'none');
+    }
+    show = !show;
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,240-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tinnypp"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';    //change to ds.src = '/blog/js/embed.js'; to add useragent for duoshuo
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+<script type="text/javascript">
+  function footerPosition() {
+    var contentHeight = document.documentElement.scrollHeight,
+        winHeight = window.innerHeight;
+    if(contentHeight <= winHeight) {
+      $('footer').addClass('fixed-bottom');
+    } else {
+      $('footer').removeClass('fixed-bottom');
+    }
+  }
+  footerPosition();
+  $(window).resize(footerPosition);
+</script>
+
+
+  </body>
+</html>

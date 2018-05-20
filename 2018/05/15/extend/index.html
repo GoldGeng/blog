@@ -1,0 +1,439 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Javascript扩展对象extend实现 | Hexo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="John Doe">
+    
+    <meta name="description" content="jQuery的$.extend方法是我们在开发中经常用到的方法，用于合并若干个对象，且支持深度拷贝。
+最常见的一个使用场景是参数的合并，比如我们要做一个显示对话框的组件，接收一个option对象参数，把它和默认参数defaultOption合并，得到新的参数。这样做的好处就是对option字段的拓展">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/blog/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/blog/img/myLogo.png">
+    <link rel="apple-touch-icon-precomposed" href="/blog/img/myLogo.png">
+    
+
+  
+    <link href="/blog/css/font-awesome.min.css" rel="stylesheet">
+    
+  
+
+    <link rel="stylesheet" href="/blog/css/style.css">
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?d182ed77fc48758bf45a33835ee35745";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+      <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
+
+  _st('install','.............Add your swiftype userID...............');
+</script>
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/blog/" title="Hexo">Hexo</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+                    <ul>
+					 
+						<li><a href="/blog">首页</a></li>
+					
+						<li><a href="/blog/archives">归档</a></li>
+					
+					<li>
+					
+					</li>
+                <!--<li><div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div></li>-->
+
+				</ul>
+			</nav>	
+</div>
+    </header>
+    <div id="container" class="clearfix">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/blog/2018/05/15/extend/" title="Javascript扩展对象extend实现" itemprop="url">Javascript扩展对象extend实现</a>
+  </h1>
+  <p class="article-time">
+    <time datetime="2018-05-15T10:16:53.000Z" itemprop="datePublished">2018-05-15</time>
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title"></strong>
+		
+		</div>
+		
+		<p>jQuery的<code>$.extend</code>方法是我们在开发中经常用到的方法，用于合并若干个对象，且支持深度拷贝。</p>
+<p>最常见的一个使用场景是参数的合并，比如我们要做一个显示对话框的组件，接收一个<code>option</code>对象参数，把它和默认参数<code>defaultOption</code>合并，得到新的参数。这样做的好处就是对<code>option</code>字段的拓展非常方便，并且使用者可以只传部分参数，其他均为默认值，代码可读性也比较好。</p>
+<pre><code>var showDialog = (function() {
+     var defaultOption = {
+        title:&apos;&apos;,
+        width:500,
+        close:function(){}
+    }
+    return function(option) {
+        $.extend({},defaultOption,option);
+    }
+})()
+
+showDialog({
+    title:&apos;&apos;,
+    close:function() {
+      console.log(&apos;dialog closed&apos;)
+    }
+})
+`&lt;/pre&gt;
+</code></pre><p>   这种模式在很多地方都用到，最常见的我们使用<code>$.ajax</code>发起ajax请求，对于传递的option也是这样处理的。</p>
+<p>   在现在的项目中，由于用的是Vue，避免了繁琐的Dom操作，所以用不到jQuery提供的dom操作。但是我需要<code>$.extend</code>方法。在查看了他的源码之后，本来打算直接copy过来使用，可是发现它有很多依赖项，懒得一一去找，所以索性自己从头写一个。</p>
+<p>   我们可以考虑首先实现一个最简单的extend函数，即用<code>for in</code>遍历源对象，覆盖目标对象的对应属性即可。</p>
+<pre><code>&lt;pre&gt;`var extend = function(destination,source) {
+    for(var property in source) {
+        destination[property] = source[property]
+    }
+    return destination
+}
+`&lt;/pre&gt;
+</code></pre><p>   非常简洁易懂，这种实现方式满足了大部分情况下的需求，但存在一个问题，就是这种合并是浅拷贝。</p>
+<p>   如果合并的属性中含有对象<code>a</code>，那么在进行合并之后，<code>destination</code>拥有的是对象a的引用，而<code>source</code>对象也有对象<code>a</code>的引用，那么如果我们修改对象<code>a</code>的属性，<code>destination</code>和<code>source</code>都将被修改——它们引用的是同一个对象，这就是浅拷贝。我们想实现深拷贝，即在<code>destination</code>中的对象<code>a</code>是一份复制品，而不是引用，那么我们需要对对象的赋值做额外的判断和处理。</p>
+<pre><code>&lt;pre&gt;`var isObjFunc = function(name) {
+    var toString = Object.prototype.toString
+    return function() {
+        return toString.call(arguments[0]) === &apos;[object &apos; + name + &apos;]&apos;
+    } 
+}
+var isObject = isObjFunc(&apos;Object&apos;),
+var extend = function(destination,source,isDeep) {
+    var obj,copy
+    for(var property in source) {
+        obj = source[property]
+        if(isDeep &amp;amp;&amp;amp; isObject(obj) { // 判断是深拷贝且这个属性是纯对象
+            var copy = {}
+            destination[property] = extend(copy,obj,isDeep) // 递归调用，创建一份obj的拷贝，赋值给destination
+        } else {
+            destination[property] = obj
+        }
+    }
+    return destination
+}
+`&lt;/pre&gt;
+</code></pre><p>   上面的代码就实现了一个简单深拷贝。但这里还有一个漏洞，如果是数组的话，创建<code>copy</code>的时候应该设置为一个新的空数组，这样<code>for in</code>操作扩展才能正常执行。再参考<code>jQuery.extend</code>的实现方式，利用<code>arguments</code>处理多个对象合并的情况，最终的代码如下，较为完整的实现了<code>extend</code>，供参考。如果有bug欢迎留言指正。</p>
+<pre><code>&lt;pre&gt;`var extend = (function() {
+    var isObjFunc = function(name) {
+        var toString = Object.prototype.toString
+        return function() {
+            return toString.call(arguments[0]) === &apos;[object &apos; + name + &apos;]&apos;
+        } 
+    }
+    var   isObject = isObjFunc(&apos;Object&apos;),
+        isArray = isObjFunc(&apos;Array&apos;),
+        isBoolean = isObjFunc(&apos;Boolean&apos;)
+    return function extend() {
+        var index = 0,isDeep = false,obj,copy,destination,source,i
+        if(isBoolean(arguments[0])) {
+            index = 1
+            isDeep = arguments[0]
+        }
+        for(i = arguments.length - 1;i&amp;gt;index;i--) {
+            destination = arguments[i - 1]
+            source = arguments[i]
+            if(isObject(source) || isArray(source)) {
+                console.log(source)
+                for(var property in source) {
+                    obj = source[property]
+                    if(isDeep &amp;amp;&amp;amp; ( isObject(obj) || isArray(obj) ) ) {
+                        copy = isObject(obj) ? {} : []
+                        var extended = extend(isDeep,copy,obj)
+                        destination[property] = extended 
+                    }else {
+                        destination[property] = source[property]
+                    }
+                }
+            } else {
+                destination = source
+            }
+        }
+        return destination
+    }
+})()
+`&lt;/pre&gt;
+</code></pre><p>   测试代码如下</p>
+<pre><code>&lt;pre&gt;`var a = {name:1}
+var b = {name:2}
+var c = {name:3}
+extend(true,a,b,{name:[a,b,c],value:a})
+console.log(a)
+console.log(a.name[0] === a) // false
+console.log(a.value === a) // false
+</code></pre>  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2018/05/15/extend/" data-title="Javascript扩展对象extend实现 | Hexo" data-tsina="" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/blog/2018/05/15/Javascript构造函数和原型/" title="Javascript构造函数和原型">
+  <strong>New:</strong><br/>
+  <span>
+  Javascript构造函数和原型</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/blog/2018/05/11/MVC/"  title="MVC">
+ <strong>Old:</strong><br/> 
+ <span>MVC
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	
+	<div class="ds-thread" data-title="Javascript扩展对象extend实现" data-thread-key="extend" data-author-key="John Doe" data-url="http://yoursite.com/post/extend"></div>
+	
+</section>
+
+
+</div>  
+    </div>
+    <footer><div id="footer" >
+	<div class="copyright">
+		<span>Powered by <a href="https://github.com/hexojs/hexo">Hexo</a> and theme by 
+		<a href="https://github.com/levonlin/Tinnypp">Tinnypp</a>.</span>
+		
+			<span>© GoldGeng</span>
+		
+	<div>
+</div></footer>
+    <script src="/blog/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  //back to top
+  function backToTop(){
+    var buttonHTML = $("<a href=\"#top\" id=\"back-top\">" + "<span>Back to Top</span></a>");
+    buttonHTML.appendTo($("body"));
+    var buttonToTop = $("#back-top");
+    // hide #back-top first
+    buttonToTop.hide();
+
+    // fade in #back-top
+    $(function() {
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                buttonToTop.fadeIn();
+            } else {
+                buttonToTop.fadeOut();
+            }
+        });
+        // scroll body to 0px on click
+        buttonToTop.click(function() {
+            $('body,html').animate({
+                scrollTop: 0
+            }, 800);
+            return false;
+        });
+    });
+  }
+  backToTop();
+
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      ta = $('#toc.toc-aside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+        
+    }
+  });
+
+  var show = true;
+  c.click(function(){
+    if(show == true){
+        a.addClass('fadeOut').css('display', 'none');
+        ta.css('display', 'block').addClass('fadeIn');
+        m.addClass('moveMain');  
+    }else{
+        a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');     
+        ta.css('display', 'none'); 
+        m.removeClass('moveMain');
+        $('#toc.toc-aside').css('display', 'none');
+    }
+    show = !show;
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,240-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tinnypp"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';    //change to ds.src = '/blog/js/embed.js'; to add useragent for duoshuo
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+<script type="text/javascript">
+  function footerPosition() {
+    var contentHeight = document.documentElement.scrollHeight,
+        winHeight = window.innerHeight;
+    if(contentHeight <= winHeight) {
+      $('footer').addClass('fixed-bottom');
+    } else {
+      $('footer').removeClass('fixed-bottom');
+    }
+  }
+  footerPosition();
+  $(window).resize(footerPosition);
+</script>
+
+
+  </body>
+</html>

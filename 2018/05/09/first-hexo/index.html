@@ -1,0 +1,358 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>GET vs POST | Hexo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="John Doe">
+    
+    <meta name="description" content="发起 HTTP 请求有四种基本方法：PUT、DELETE、POST 和 GET，通俗讲可以认为对应于增删改查四个方面。根据 HTTP 规范，GET 请求用于获取信息，是安全和幂等的，这里的安全并不代表不会泄露信息，而是说它用来获取信息，查询数据库，不会影响数据库的数据，也不会影响资源的状态；POST">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/blog/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/blog/img/myLogo.png">
+    <link rel="apple-touch-icon-precomposed" href="/blog/img/myLogo.png">
+    
+
+  
+    <link href="/blog/css/font-awesome.min.css" rel="stylesheet">
+    
+  
+
+    <link rel="stylesheet" href="/blog/css/style.css">
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?d182ed77fc48758bf45a33835ee35745";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+      <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
+
+  _st('install','.............Add your swiftype userID...............');
+</script>
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/blog/" title="Hexo">Hexo</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+                    <ul>
+					 
+						<li><a href="/blog">首页</a></li>
+					
+						<li><a href="/blog/archives">归档</a></li>
+					
+					<li>
+					
+					</li>
+                <!--<li><div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div></li>-->
+
+				</ul>
+			</nav>	
+</div>
+    </header>
+    <div id="container" class="clearfix">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/blog/2018/05/09/first-hexo/" title="GET vs POST" itemprop="url">GET vs POST</a>
+  </h1>
+  <p class="article-time">
+    <time datetime="2018-05-09T07:46:03.000Z" itemprop="datePublished">2018-05-09</time>
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title"></strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#优点和缺点"><span class="toc-number">1.</span> <span class="toc-text">优点和缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#服务器端"><span class="toc-number">2.</span> <span class="toc-text">服务器端</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTPS"><span class="toc-number">3.</span> <span class="toc-text">HTTPS</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#参考资料"><span class="toc-number">3.0.0.0.1.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+		</div>
+		
+		<p>发起 HTTP 请求有四种基本方法：PUT、DELETE、POST 和 GET，通俗讲可以认为对应于增删改查四个方面。根据 HTTP 规范，GET 请求用于获取信息，是安全和幂等的，这里的安全并不代表不会泄露信息，而是说它用来获取信息，查询数据库，不会影响数据库的数据，也不会影响资源的状态；POST 请求则有可能会修改服务器上数据库的数据和资源的状态。</p>
+<p>对于 <code>&lt;form&gt;&lt;/form&gt;</code> 标签，其 <code>action</code> 属性的默认值是 GET，可以修改为 POST。使用 GET 时，表单数据中的数据会被转义并以查询字符串的形式追加到 URL 的尾部；使用 POST 时，表单数据会依附请求体发送给服务器。</p>
+<p>下面的表格从多方面比较了两者的差异:</p>
+<table><br><thead><br><tr><br><th>维度</th><br><th>GET（HTTP）</th><br><th>POST（HTTP）</th><br></tr><br></thead><br><tbody><br><tr><br><td>历史记录</td><br><td>由于数据被添加到了 URL 中，所以会保留在浏览器的历史记录之中</td><br><td>数据不会保留在浏览器的历史记录之中</td><br></tr><br><tr><br><td>书签</td><br><td>可收藏为书签</td><br><td>不可收藏为书签</td><br></tr><br><tr><br><td>后退和重新提交</td><br><td>如果 HTML 被浏览器缓存了，则重新执行 GET 请求可能不会向服务器重新提交数据</td><br><td>浏览器应该提醒用户：数据需要重新提交</td><br></tr><br><tr><br><td>编码格式</td><br><td>“application/x-www-form-urlencoded”</td><br><td>“multipart/form-data”（主要用于二进制数据）或 “application/x-www-form-urlencoded”</td><br></tr><br><tr><br><td>参数</td><br><td>长度受限于 URL 的长度，通常在 2K 以内，具体长度取决于浏览器和服务器</td><br><td>可发送参数，包括上传的文件等</td><br></tr><br><tr><br><td>是否可以修改</td><br><td>可被脚本修改</td><br><td>比较难修改</td><br></tr><br><tr><br><td>数据类型是否有限制</td><br><td>只接受 ASCII 字符，其他字符会被转义</td><br><td>无限制，可接收二进制数据</td><br></tr><br><tr><br><td>安全性</td><br><td>GET 相比于 POST 的安全性低，因为发送的数据在 URL 中可见，且可以被浏览器历史记录、服务器日志记录</td><br><td>POST 的参数不会被浏览器历史记录和服务器日记记录</td><br></tr><br><tr><br><td>数据长度限制</td><br><td>受限于 URL 的长度，通常小于 2K，具体限制取决于浏览器和服务器</td><br><td>无限制，实际上也受限于服务器，但相比 GET 要长很多</td><br></tr><br><tr><br><td>可用性</td><br><td>GET 请求不应该用于发送密码等私密信息</td><br><td>POST 请求可用于发送密码等私密信息</td><br></tr><br><tr><br><td>可见性</td><br><td>GET 请求对任何人都可见并且有长度限制</td><br><td>POST 请求的数据不会显示在 URL 中</td><br></tr><br><tr><br><td>缓存</td><br><td>可被缓存</td><br><td>不可被缓存</td><br></tr><br></tbody><br></table>
+
+<h2 id="优点和缺点"><a href="#优点和缺点" class="headerlink" title="优点和缺点"></a><a href="#优点和缺点" title="优点和缺点"></a>优点和缺点</h2><p>当使用 GET 请求发送表单数据时：</p>
+<ul>
+<li>表单数据只能是 ASCII 字符，其他字符需要被转义为 ASCII 格式，但 POST 请求可以处理二进制数据、图片和其他文件</li>
+<li>所有的表单数据对于 URL 都是可见的，而且会被缓存在浏览器的历史记录中，降低了安全性</li>
+<li>GET 请求的一个优势是表单数据可以被收藏为书签，也可以直接用于填充表单数据</li>
+<li>表单数据的长度会受到 URL 长度的限制</li>
+<li>易于遭受脚本攻击</li>
+</ul>
+<h2 id="服务器端"><a href="#服务器端" class="headerlink" title="服务器端"></a><a href="#服务器端" title="服务器端"></a>服务器端</h2><p>由于 GET 和 POST 对数据的编码方式不同，所以在服务端解码数据的方式也不同。在 ASP 中，服务端使用 <code>Request.QueryString</code> 获取 GET 请求参数，使用 <code>Request.Form</code> 获取 POST 请求参数。</p>
+<h2 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a><a href="#HTTPS" title="HTTPS"></a>HTTPS</h2><p>使用 HTTPS 发起 GET 请求是否会更安全些呢？我们就做如下的请求来回答这一问题：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">GET <a href="https://www.example.com/login.php?user=mickey&amp;passwd=mini" target="_blank" rel="noopener">https://www.example.com/login.php?user=mickey&amp;passwd=mini</a></div></pre></td></tr></table></figure>
+
+<p>假设有人监视了这一 GET 请求，那么他只会看到如下信息：</p>
+<ul>
+<li>这是一个 HTTPS 链接</li>
+<li>域名 <code>www.example.com</code></li>
+<li>请求的长度</li>
+<li>响应的长度</li>
+</ul>
+<p>URL 路径以及查询字符串都是不可见的。由此可见，在这些方面，GET 请求和 POST 请求的安全性相同。但是，浏览器仍然会记录 URL，所以无论是 HTTP 还是 HTTPS，使用 GET 发送敏感信息仍是不安全的。</p>
+<h6 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a><a href="#参考资料" title="参考资料"></a>参考资料</h6><ul>
+<li><a href="http://www.diffen.com/difference/GET_%28HTTP%29_vs_POST_%28HTTP%29%23Differences_in_Server-Side_Processing" target="_blank" rel="noopener">GET vs. POST</a></li>
+<li><a href="http://www.cnblogs.com/hyddd/archive/2009/03/31/1426026.html" target="_blank" rel="noopener">浅谈 HTTP 中的 GET 和 POST 的区别</a></li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2018/05/09/first-hexo/" data-title="GET vs POST | Hexo" data-tsina="" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/blog/2018/05/09/xingneng/" title="性能优化的十二个方面">
+  <strong>New:</strong><br/>
+  <span>
+  性能优化的十二个方面</span>
+</a>
+</div>
+
+
+</nav>
+
+	
+<section class="comment">
+	
+	<div class="ds-thread" data-title="GET vs POST" data-thread-key="first-hexo" data-author-key="John Doe" data-url="http://yoursite.com/post/first-hexo"></div>
+	
+</section>
+
+
+</div>  
+    </div>
+    <footer><div id="footer" >
+	<div class="copyright">
+		<span>Powered by <a href="https://github.com/hexojs/hexo">Hexo</a> and theme by 
+		<a href="https://github.com/levonlin/Tinnypp">Tinnypp</a>.</span>
+		
+			<span>© GoldGeng</span>
+		
+	<div>
+</div></footer>
+    <script src="/blog/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  //back to top
+  function backToTop(){
+    var buttonHTML = $("<a href=\"#top\" id=\"back-top\">" + "<span>Back to Top</span></a>");
+    buttonHTML.appendTo($("body"));
+    var buttonToTop = $("#back-top");
+    // hide #back-top first
+    buttonToTop.hide();
+
+    // fade in #back-top
+    $(function() {
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                buttonToTop.fadeIn();
+            } else {
+                buttonToTop.fadeOut();
+            }
+        });
+        // scroll body to 0px on click
+        buttonToTop.click(function() {
+            $('body,html').animate({
+                scrollTop: 0
+            }, 800);
+            return false;
+        });
+    });
+  }
+  backToTop();
+
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      ta = $('#toc.toc-aside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+        
+    }
+  });
+
+  var show = true;
+  c.click(function(){
+    if(show == true){
+        a.addClass('fadeOut').css('display', 'none');
+        ta.css('display', 'block').addClass('fadeIn');
+        m.addClass('moveMain');  
+    }else{
+        a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');     
+        ta.css('display', 'none'); 
+        m.removeClass('moveMain');
+        $('#toc.toc-aside').css('display', 'none');
+    }
+    show = !show;
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,240-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tinnypp"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';    //change to ds.src = '/blog/js/embed.js'; to add useragent for duoshuo
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+<script type="text/javascript">
+  function footerPosition() {
+    var contentHeight = document.documentElement.scrollHeight,
+        winHeight = window.innerHeight;
+    if(contentHeight <= winHeight) {
+      $('footer').addClass('fixed-bottom');
+    } else {
+      $('footer').removeClass('fixed-bottom');
+    }
+  }
+  footerPosition();
+  $(window).resize(footerPosition);
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,582 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>MVC | Hexo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="John Doe">
+    
+    <meta name="description" content="MVC是一个架构设计模式，它通过分离关注点的方式来支持改进应用组织方式。它促成了业务数据(Models)从用户界面(Views)中分离出来，还有第三个组成部分(Controllers)负责管理传统意义上的业务逻辑和用户输入。该模式最初是由Trygve Reenskaug在研发Smalltalk-80">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/blog/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/blog/img/myLogo.png">
+    <link rel="apple-touch-icon-precomposed" href="/blog/img/myLogo.png">
+    
+
+  
+    <link href="/blog/css/font-awesome.min.css" rel="stylesheet">
+    
+  
+
+    <link rel="stylesheet" href="/blog/css/style.css">
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?d182ed77fc48758bf45a33835ee35745";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+      <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
+
+  _st('install','.............Add your swiftype userID...............');
+</script>
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/blog/" title="Hexo">Hexo</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+                    <ul>
+					 
+						<li><a href="/blog">首页</a></li>
+					
+						<li><a href="/blog/archives">归档</a></li>
+					
+					<li>
+					
+					</li>
+                <!--<li><div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div></li>-->
+
+				</ul>
+			</nav>	
+</div>
+    </header>
+    <div id="container" class="clearfix">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/blog/2018/05/11/MVC/" title="MVC" itemprop="url">MVC</a>
+  </h1>
+  <p class="article-time">
+    <time datetime="2018-05-11T03:45:09.000Z" itemprop="datePublished">2018-05-11</time>
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title"></strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Smalltalk-80-MVC"><span class="toc-number">1.</span> <span class="toc-text">Smalltalk-80 MVC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JavaScript-开发者可以使用的-MVC"><span class="toc-number">2.</span> <span class="toc-text">JavaScript 开发者可以使用的 MVC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Models"><span class="toc-number">2.1.</span> <span class="toc-text">Models</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MVC给了我们什么"><span class="toc-number">3.</span> <span class="toc-text">MVC给了我们什么?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JavaScript中的Smalltalk-80-MVC"><span class="toc-number">4.</span> <span class="toc-text">JavaScript中的Smalltalk-80 MVC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更加深入的钻研"><span class="toc-number">5.</span> <span class="toc-text">更加深入的钻研</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
+		</div>
+		
+		<p>MVC是一个架构设计模式，它通过分离关注点的方式来支持改进应用组织方式。它促成了业务数据(Models)从用户界面(Views)中分离出来，还有第三个组成部分(Controllers)负责管理传统意义上的业务逻辑和用户输入。该模式最初是由<a href="http://en.wikipedia.org/wiki/Trygve_Reenskaug" target="_blank" rel="noopener">Trygve Reenskaug</a>在研发Smalltalk-80 (1979)期间设计的，当时它起初被称作Model-View-Controller-Editor。在1995年的<a href="http://www.amazon.co.uk/Design-patterns-elements-reusable-object-oriented/dp/0201633612" target="_blank" rel="noopener">“设计模式: 面向对象软件中的可复用元素”</a> (著名的&quot;GoF&quot;的书)中，MVC被进一步深入的描述，该书对MVC的流行使用起到了关键作用。</p>
+<h2 id="Smalltalk-80-MVC"><a href="#Smalltalk-80-MVC" class="headerlink" title="Smalltalk-80 MVC"></a>Smalltalk-80 MVC</h2><p>了解一下最初的MVC模式打算解决什么问题是很重要的，因为自从诞生之日起它已经发生了很大的改变。回到70年代，图形用户界面还很稀少，一个被称为分离展示的概念开始被用来清晰的划分下面两种对象：领域对象，它对现实世界里的概念进行建模(比如一张照片，一个人)， 还有展示对象，它被渲染到用户屏幕上进行展示。</p>
+<p>Smalltalk-80作为MVC的实现，把这一概念进一步发展，产生这样一个观点，即把应用逻辑从用户界面中分离开来。这种想法使得应用的各个部分之间得以解耦，也允许该应用中的其它界面对模型进行复用。关于Smalltalk-80的MVC架构，有几点很有趣，值得注意一下:</p>
+<ul>
+<li>模型表现了领域特定的数据,并且不用考虑用户界面(视图和控制器).当一个模型有所改变的时候,它会通知它的观察者。</li>
+<li>视图表现了一个模型的当前状态.观察者模式被用来让视图在任何时候都知晓模型已经被更新了或者被改变了。</li>
+<li>展现受到视图的照管,但是不仅仅只有一个单独的视图或者控制器——每一个在屏幕上展现的部分或者元素都需要一个视图-控制器对。</li>
+<li>控制器在这个视图-控制器对中扮演着处理用户交互的角色（比如按键或者点击动作），做出对视图的选择。</li>
+</ul>
+<p>开发者有时候会惊奇于他们了解到的观察者模式（如今已经被普遍的作为发布/订阅的变异实现了）已经在几十年以前被作为MVC架构的一部分包含进去了.在Smalltalk-80的 MVC中,视图观察着模型.如上面要点中所提到的,模型在任何时候发生了改变,视图就会做出响应.一个简单的示例就是一个由股票市场数据支撑的应用程序——为了应用程序的实用性，任何对于我们模型中数据的改变都应该导致视图中的结果实时的刷新。</p>
+<p>Martin Fowler在过去数年完成了对原生MVC有关问题进行写作的优秀工作，如果对关于Smalltalk-80的MVC的更深入的历史信息感兴趣的话，我建议您读一读他的作品。</p>
+<h2 id="JavaScript-开发者可以使用的-MVC"><a href="#JavaScript-开发者可以使用的-MVC" class="headerlink" title="JavaScript 开发者可以使用的 MVC"></a>JavaScript 开发者可以使用的 MVC</h2><p>我们已经回顾了70年代，让我们回到当下回到眼前。现在，MVC模式已经被应用到大范围的编程语言当中，包括与我们关系最近的JavaScript。JavaScript领域现在有一些鼓励支持MVC (或者是它的变种，我们称之为<code>MV*</code> 家族)的框架，允许开发者不用付出太多的努力就可以往他们的应用中添加新的结构。</p>
+<p>这些框架包括诸如Backbone, Ember.js和AngularJS。考虑到避免出现“意大利面条”式的代码的重要性，该词是指那些由于缺乏结构设计而导致难于阅读和维护的代码，对现代JavaScript开发者来说，了解该模式能够提供什么已经是势在必行。这使得我们可以有效的领会到，这些框架能让我们以不同的方式做哪些事情。</p>
+<p>我们知道MVC由三个核心部分组成:</p>
+<h3 id="Models"><a href="#Models" class="headerlink" title="Models"></a>Models</h3><p>Models管理一个业务应用的数据。它们既与用户界面无关也与表现层无关，相反的它们代表了一个业务应用所需要的形式唯一的数据。当一个model改变时(比如当它被更新时)，它通常会通知它的观察者(比如我们很快会介绍的views)一个改变已经发生了，以便观察者采取相应的反应。</p>
+<p>为了更深的理解models，让我们假设我们有一个JavaScript的相册应用。在一个相册中，照片这个概念配得上拥有一个自己的model， 因为它代表了特定领域数据的一个独特类型。这样一个model可以包含一些相关的属性，比如标题，图片来源和额外的元数据。一张特定的照片可以存储到model的一个实例中，而且一个model也可以被复用。下面我们可以看到一个用Backbone实现的被简化的model例子。</p>
+<pre><code>var Photo = Backbone.Model.extend({
+
+    // 照片的默认属性
+    defaults: {
+      src: &quot;placeholder.jpg&quot;,
+      caption: &quot;A default image&quot;,
+      viewed: false
+    },
+
+    // 确保每一个被创建的照片都有一个`src`.
+    initialize: function() {
+       this.set( { &quot;src&quot;: this.defaults.src} );
+    }
+
+});`&lt;/pre&gt;
+
+不同的框架其内置的模型的能力有所不同,然而他们对于属性验证的支持还是相当普遍的,属性展现了模型的特征,比如一个模型标识符.当在一个真实的世界使用模型的时候,我们一般也希望模型能够持久.持久化允许我们用最近的状态对模型进行编辑和更新,这一状态会存储在内存、用户的本地数据存储区或者一个同步的数据库中。
+
+另外，模型可能也会被多个视图观察着。如果说，我们的照片模型包含了一些元数据，比如它的位置（经纬度），照片中所展现的好友（一个标识符的列表）和一个标签的列表，开发者也许会选择为这三个方面的每一个提供一个单独的视图。
+
+为现代`MVC/MV*`框架提供一种将模型组合到一起的方法（例如，在Backbone中，这些分组作为“集合”被引用）并不常见。管理分组中的模型允许我们基于来自分组中所包含的模型发生改变的通知,来编写应用程序逻辑.这避免了手动设置去观察每一个单独的模型实体的必要。
+
+如下是一个将模型分组成一个简化的Backbone集合的示例:
+
+&lt;pre&gt;`var PhotoGallery = Backbone.Collection.extend({
+
+    // Reference to this collection&apos;s model.
+    model: Photo,
+
+    // Filter down the list of all photos
+    // that have been viewed
+    viewed: function() {
+        return this.filter(function( photo ){
+           return photo.get( &quot;viewed&quot; );
+        });
+    },
+
+    // Filter down the list to only photos that
+    // have not yet been viewed
+    unviewed: function() {
+      return this.without.apply( this, this.viewed() );
+    }
+});`&lt;/pre&gt;
+
+MVC上旧的文本可能也包含了模型管理着应用程序状态的一种概念的引述.Javascript中的应用程序状态有一种不同的意义,通常指的是当前的&amp;quot;状态&amp;quot;,即在一个固定点上的用户屏幕上的视图或者子视图(带有特定的数据).状态是一个经常被谈论到的话题,看一看单页面应用程序,其中的状态的概念需要被模拟。
+
+总而言之,模型主要关注的是业务数据。
+
+## 视图
+
+视图是模型的可视化表示，提供了一个当前状态的经过过滤的视图。Smaltalk的视图是关于绘制和操作位图的，而JavaScript的视图是关于构建和操作DOM元素的。
+
+一个视图通常是模型的观察者，当模型改变的时候，视图得到通知，因此使得视图可以更新自身。用设计模式的语言可以称视图为“哑巴”，因为在应用程序中是它们关于模型和控制器的了解是受到限制的。
+
+用户可以和视图进行交互，包括读和编辑模型的能力（例如，获取或者设置模型的属性值）。因为视图是表示层，我们通常以用户友好的方式提供编辑和更新的能力。例如，在之前我们讨论的照片库应用中，模型编辑可以通过“编辑”视图来进行，这个视图里面，用户可以选择一个特定的图片，接着编辑它的元数据。
+
+而实际更新模型的任务落到了控制器上面（我们很快就会讲这个东西）。
+
+让我们使用vanilla JavaScript 实现的例子来更深入的探索一下视图。下面我们可以看到一个函数创建了一个照片视图，使用了模型实例和控制器实例。
+
+我们在视图里定义了一个render()工具，使用一个JavaScript模板引擎来用于渲染照片模型的内容（Underscore的模板），并且更新了我们视图的内容，供照片EI来参考。
+
+照片模型接着将我们的render()函数作为一个其一个订阅者的回调函数，这样通过观察者模式，当模型发生改变的时候，我们就能触发视图的更新。
+
+人们可能会问用户交互如何在这里起作用的。当用户点击视图中的任何元素，不是由视图决定接下来怎么做。而是由控制器为视图做决定。在我们的例子中，通过为photoEI增加一个事件监听器，来达到这个目的，photoEI将会代理处理送往控制器的点击行为，在需要的时候将模型信息和事件一并传递。
+
+这个架构的好处是每个组件在应用工作的时候都扮演着必要的独立的角色。
+
+&lt;pre&gt;`var buildPhotoView = function ( photoModel, photoController ) {
+
+  var base = document.createElement( &quot;div&quot; ),
+      photoEl = document.createElement( &quot;div&quot; );
+
+  base.appendChild(photoEl);
+
+  var render = function () {
+          // We use a templating library such as Underscore
+          // templating which generates the HTML for our
+          // photo entry
+          photoEl.innerHTML = _.template( &quot;#photoTemplate&quot; , {
+              src: photoModel.getSrc()
+          });
+      };
+
+  photoModel.addSubscriber( render );
+
+  photoEl.addEventListener( &quot;click&quot;, function () {
+    photoController.handleEvent( &quot;click&quot;, photoModel );
+  });
+
+  var show = function () {
+    photoEl.style.display = &quot;&quot;;
+  };
+
+  var hide = function () {
+    photoEl.style.display = &quot;none&quot;;
+  };
+
+  return {
+    showView: show,
+    hideView: hide
+  };
+
+};`&lt;/pre&gt;
+
+## 模板
+
+在支持`MVC/MV*`的JavaScript框架的下，有必要简略的讨论一下JavaScript的模板以及它们与视图之间的关系，在上一小节，我们已经接触到这种关系了。
+
+历史已经证明在内存中通过字符串拼接来构建大块的HTML标记是一种糟糕的性能实践。开发者这样做，就会深受其害。遍历数据，将其封装成嵌套的div，使用例如document.writeto 这样过时的技术将&amp;quot;模板&amp;quot;注入到DOM中。这样通常意味着校本化的标记将会嵌套在我们标准的标记中，很快就变得很难阅读了，更重要的是，维护这样的代码将是一场灾难，尤其是在构建大型应用的时候。
+
+JavaScript 模板解决方案（例如Handlebars.js 和Mustache）通常用于为视图定义模板作为标记（要么存储在外部，要么存储在脚本标签里面，使用自定义的类型例如text/template），标记中包含有模板变量。变量可以使用变化的语法来分割（例如{{name}}），框架通常也足够只能接受JSON格式的数据（模型可以转化成JSOn格式），这样我们只需要关心如何维护干净的模型和干净的模板。人们遭遇的绝大多数的苦差事都被框架本身所处理了。这样做有大量的好处，尤其选择是将模板存储在外部的时候，这样在构建大型引应用的时候可以是模板按照需要动态加载。
+
+下面我们可以看到两个HTMP模板的例子。一个使用流行的Handlebar.js框架实现，一个使用Underscore模板实现。
+
+### Handlebars.js
+
+&lt;pre&gt;`&amp;lt;li class=&quot;photo&quot;&amp;gt;
+  &amp;lt;h2&amp;gt;{{caption}}&amp;lt;/h2&amp;gt;
+  &amp;lt;img class=&quot;source&quot; src=&quot;{{src}}&quot;/&amp;gt;
+  &amp;lt;div class=&quot;meta-data&quot;&amp;gt;
+    {{metadata}}
+  &amp;lt;/div&amp;gt;
+&amp;lt;/li&amp;gt;`&lt;/pre&gt;
+
+### Underscore.js Microtemplates
+
+&lt;pre&gt;`&amp;lt;li class=&quot;photo&quot;&amp;gt;
+  &amp;lt;h2&amp;gt;&amp;lt;%= caption %&amp;gt;&amp;lt;/h2&amp;gt;
+  &amp;lt;img class=&quot;source&quot; src=&quot;&amp;lt;%= src %&amp;gt;&quot;/&amp;gt;
+  &amp;lt;div class=&quot;meta-data&quot;&amp;gt;
+    &amp;lt;%= metadata %&amp;gt;
+  &amp;lt;/div&amp;gt;
+&amp;lt;/li&amp;gt;&amp;lt;span style=&quot;line-height:1.5;font-family:&apos;sans serif&apos;, tahoma, verdana, helvetica;font-size:10pt;&quot;&amp;gt;&amp;lt;/span&amp;gt;`&lt;/pre&gt;
+
+请注意模板并不是它们自身的视图，来自于Struts Model 2 架构的开发者可能会感觉模板就是一个视图，但并不是这样的。视图是一个观察着模型的对象，并且让可视的展现保持最新。模板也许是用一种声明的方式指定部分甚至所有的视图对象，因此它可能是从模板定制文档生成的。
+
+在经典的web开发中，在单独的视图之间进行导航需要利用到页面刷新，然而也并不值得这样做。而在单页面Javascript应用程序中，一旦数据通过ajax从服务器端获取到了，并不需要任何这样必要的刷新，就可以简单的在同一个页面渲染出一个新的视图。
+
+这里导航就降级为了“路由”的角色，用来辅助管理应用程序状态（例如，允许用户用书签标记它们已经浏览到的视图）。然而，路由既不是MVC的一部分，也不在每一个类MVC框架中展现出来，在这一节中我将不深入详细的讨论它们。
+
+总而言之，视图是对我们的数据的一种可视化展现。
+
+## 控制器
+
+控制器是模型和视图之间的中介，典型的职责是当用户操作视图的时候同步更新模型。
+
+在我们的照片廊应用程序中，控制器会负责处理用户通过对一个特定照片的视图进行编辑所造成改变，当用户完成编辑后，就更新一个特定的照片模型。
+
+请记住满足了MVC中的一种角色：针对视图的策略模式的基础设施。在策略模式方面，视图在视图的自由载量权方面代表了控制器。因此，那就是测试模式是如何工作的，视图可以代表针对控制器的用户事件，当视图看起来合适的时候。视图也可以代表针对控制器的模型变更事件处理，当视图看起来合适的时候，但这并不是控制器的传统角色。
+
+大多数的Javascript MVC框架都受到了对&amp;quot;MVC&amp;quot;通常认知的影响,而这种认知是和控制器绑定在一起的.出现这种情况的原因各异,但在我的真实想法中,那是由于框架的作者一开始就将从服务器端的角度看待MVC,意识到它并不在客户端进行1:1的翻译,而对MVC中的C进行重新诠释意在他们感觉更加有意义的事情.与此同在的问题在于它是主观的,增加了理解经典MVC模式的复杂度,当然还有控制器在现代框架中的角色。
+
+作为示例,让我们来简要回顾一下当前流行的一种构造框架Backbone.js其架构.Backbone包含了模型和视图(某些东西同我们前面看到的类似),然而它实际上并没有真正的控制器.它的视图和路由行为同控制器有一点点类似,但它们自身实际上都不是控制器。
+
+在这一方面,同官方文档或者博客文章中可能提到的相左,Backbone既不是一个真正的MVC/MVP框架,也不是一个MVVM框架.事实上把它看做是用它自身的方式架构方法的`MV*`家族中的一员,更加合适.当然这没有任何错误的地方,但区分经典MVC和`MV*`是重要的,我们应该依靠前者的经典语法来帮助理解后者。
+
+### Spine.js VS Backbone.js
+
+#### Spine.js
+
+我们现在知道传统的控制器负责当用户更新视图是同步更新模型.值得注意的一个有趣的地方是大多数时下流行的Javascript MVC/MV*框架在编写的时候(Backbone)都没有属于它们自己的明确的控制器的概念。
+
+因此,这对于我们从另一个MVC框架中体会到控制器实现的差异,并更进一步的展现出控制如何扮演着非传统的角色是很有用处的.对于这一点,让我们来看看来自于Spine.js的示例控制器。
+
+在这个示例中,我们会有一个叫做PhotosController的控制器，用来管理应用程序中的个人照片.它将确保当视图更新(例如,一个用户编辑了照片的元数据)时,对应的模型也会更新。
+
+注意:我们并不会花大力气研究Spine.js,而只是对它的控制器能做什么进行一定程度的了解:
+
+&lt;pre&gt;`// Controllers in Spine are created by inheriting from Spine.Controller
+
+var PhotosController = Spine.Controller.sub({ 
+
+  init: function () {
+    this.item.bind( &quot;update&quot; , this.proxy( this.render ));
+    this.item.bind( &quot;destroy&quot;, this.proxy( this.remove ));
+  },
+
+  render: function () {
+    // Handle templating
+    this.replace( $( &quot;#photoTemplate&quot; ).tmpl( this.item ) );
+    return this;
+  },
+
+  remove: function () {
+    this.el.remove();
+    this.release();
+  }
+});`&lt;/pre&gt;
+
+在Spine中,控制器被认为是一个应用程序的粘合剂,对DOM事件进行添加和响应,渲染模板,还有确保视图和模型保持同步(这在我们所知的控制器的上下文中起作用)。
+
+我们在上面的example.js示例中所做的,是使用render()和remove()方法在更新和销毁事件中设置侦听器。当一个照片条目获得更新的时候，我们对视图进行重新渲染，以此反映对元数据的修改。类似的，如果照片从照片集中被删除了，我们也会把它从视图中移除。在render()函数中，我们使用Underscore微模板（通过_.template())来用ID #photoTemplate对一个Javascript模板进行渲染。这样会简单的返回一个编辑了的HTML字符串用来填充photoEL的内容。
+
+这为我们提供了一个非常轻量级的，简单的管理模型和视图之间的变更的方法。
+
+#### Backbone.js
+
+后面的章节我们将会对Backbone和传统MVC之间的区别进行一下重新审视,但现在还是让我们专注于控制器吧。
+
+在Backbone中,控制器的责任一分为二,由Backbone.View和Backbone.Router共享.前段时间Backbone确曾有其属于自己的Backbone.Controller,但是对这一组件的命名对于它所被使用的上下文环境中并没有什么意义,后来它就被重新命名为Router了。
+
+Router比控制器要负担处理着更多一点点的责任,因为它使得为模型绑定事件,以及让我们的视图对DOM事件和渲染产生响应,成为可能.如Tim Branyen(另外一名基于Bocoup的Backbone贡献者)在以前所指出的，为此完全摆脱不使用Backbone.Router是有可能的，因此一种考虑让它使用Router范式的做法可能像下面这样：
+
+&lt;pre&gt;`var PhotoRouter = Backbone.Router.extend({
+  routes: { &quot;photos/:id&quot;: &quot;route&quot; },
+
+  route: function( id ) {
+    var item = photoCollection.get( id );
+    var view = new PhotoView( { model: item } );
+
+    $(&apos;.content&apos;).html( view.render().el );
+  }
+});
+</code></pre><p>总之,本节的重点是控制器管理着应用程序中模型和视图之间的逻辑和协作。</p>
+<h2 id="MVC给了我们什么"><a href="#MVC给了我们什么" class="headerlink" title="MVC给了我们什么?"></a>MVC给了我们什么?</h2><p>MVC中关注分离的思想有利于对应用程序中功能进行更加简单的模块化,并且使得:</p>
+<ul>
+<li>整体的维护更加便利.当需要对应用程序进行更新时,到底这些改变是否是以数据为中心的,意味着对模型的修改还-有可能是控制器,或者仅仅是视觉的,意味着对视图的修改,这一区分是非常清楚的。</li>
+<li>对模型和视图的解耦意味着为业务逻辑编写单元测试将会是更加直截了当的。</li>
+<li>对底层模型和控制器的代码解耦(即我们可能会取代使用的)在整个应用程序中被淘汰了。</li>
+<li>依赖于应用程序的体积和角色的分离,这种模块化允许负责核心逻辑的开发者和工作于用户界面的开发者同时进行工作。</li>
+</ul>
+<h2 id="JavaScript中的Smalltalk-80-MVC"><a href="#JavaScript中的Smalltalk-80-MVC" class="headerlink" title="JavaScript中的Smalltalk-80 MVC"></a>JavaScript中的Smalltalk-80 MVC</h2><p>尽管当今主流的JavaScript框架都尝试引入MVC的模式，来更好地面对web应用的开发。由Peter Michaux编写的<a href="https://github.com/petermichaux/maria" target="_blank" rel="noopener">Maria.js</a> ，是一个尝试纯正的Smalltalk-80的框架。其中，Model只是Model，View也只完成View应该做的，controller则只负责控制。然后，一些开发人员认为，MV*架构更值得关注，如果你对纯正的MVC架构的JavaScript实现感兴趣，这将是很好的参考。</p>
+<h2 id="更加深入的钻研"><a href="#更加深入的钻研" class="headerlink" title="更加深入的钻研"></a>更加深入的钻研</h2><p>在这本书的这一点上,我们应该对MVC模式提供了些什么有了一个基础的了解,然而仍然有一些值得去关注的非常美妙的信息。</p>
+<p>GoF并不将MVC引述为一种设计模式,而是把它看做是构建一个用户界面的类的集合.按照他们的观点,它实际上是三种经典设计模式的变异组合:观察者模式,策略模式和组件模式.依赖于框架中的MVC如何实现,它也可能会使用工厂和模板模式.GoF Book提到这些模式在使用MVC工作时是非常有用的附加功能。</p>
+<p>如我们所讨论的,模型代表应用程序的数据,而视图则是用户在屏幕上看到的被展现出来的东西.如此,MVC它的一些核心的通讯就要依赖于观察者模式(令人惊奇的是,一些相关的内容在许多关于MVC模式的书籍并没有被涵盖到).当模型被改变时,它会通知观察者(视图)一些东西已经被更新了——这也许是MVC中最重要的关系。观察者的这一特性也是实现将多个视图连结到同一个模型的基础。</p>
+<p>对于那些对MVC解耦特性想了解更多的开发者（这再一次依赖于特定的实现），这一模式的目标之一就是帮助去实现一个主体（数据对象）和它的观察者之间的一对多关系的定义。当一个主体发生改变的时候，它的观察者也会被更新。视图和控制器有一种稍微不同的关系.控制器协助视图对不同的用户输入做出响应,这也是一个策略模式的例子。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>回顾完经典的MVC模式以后,我们现在应该理解了它是如何允许我们对一个应用程序中的各个关注点进行清晰地的区分.我们现在也应该感恩于Javascript MVC框架在它们对MVC模式的诠释中是如何的不同,而其对变异也是相当开放的,仍然分享着其原生模式已经提供的其中一些基础概念。</p>
+<p>当审视一个新的Javas MVC/MV*框架时,请记住——回过头去考察考察它如何选择相近的架构(特别的,它支持实现了模型,视图,控制器或者其它的一些可选特性)可能会有些用处,因为这样能够更好的帮助我们深入了解这一框架预计需要被如何拿来使用。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2018/05/11/MVC/" data-title="MVC | Hexo" data-tsina="" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/blog/2018/05/15/extend/" title="Javascript扩展对象extend实现">
+  <strong>New:</strong><br/>
+  <span>
+  Javascript扩展对象extend实现</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/blog/2018/05/09/Throttle and Debounce/"  title="Throttle and Debounce">
+ <strong>Old:</strong><br/> 
+ <span>Throttle and Debounce
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	
+	<div class="ds-thread" data-title="MVC" data-thread-key="MVC" data-author-key="John Doe" data-url="http://yoursite.com/post/MVC"></div>
+	
+</section>
+
+
+</div>  
+    </div>
+    <footer><div id="footer" >
+	<div class="copyright">
+		<span>Powered by <a href="https://github.com/hexojs/hexo">Hexo</a> and theme by 
+		<a href="https://github.com/levonlin/Tinnypp">Tinnypp</a>.</span>
+		
+			<span>© GoldGeng</span>
+		
+	<div>
+</div></footer>
+    <script src="/blog/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  //back to top
+  function backToTop(){
+    var buttonHTML = $("<a href=\"#top\" id=\"back-top\">" + "<span>Back to Top</span></a>");
+    buttonHTML.appendTo($("body"));
+    var buttonToTop = $("#back-top");
+    // hide #back-top first
+    buttonToTop.hide();
+
+    // fade in #back-top
+    $(function() {
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                buttonToTop.fadeIn();
+            } else {
+                buttonToTop.fadeOut();
+            }
+        });
+        // scroll body to 0px on click
+        buttonToTop.click(function() {
+            $('body,html').animate({
+                scrollTop: 0
+            }, 800);
+            return false;
+        });
+    });
+  }
+  backToTop();
+
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      ta = $('#toc.toc-aside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+        
+    }
+  });
+
+  var show = true;
+  c.click(function(){
+    if(show == true){
+        a.addClass('fadeOut').css('display', 'none');
+        ta.css('display', 'block').addClass('fadeIn');
+        m.addClass('moveMain');  
+    }else{
+        a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');     
+        ta.css('display', 'none'); 
+        m.removeClass('moveMain');
+        $('#toc.toc-aside').css('display', 'none');
+    }
+    show = !show;
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,240-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tinnypp"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';    //change to ds.src = '/blog/js/embed.js'; to add useragent for duoshuo
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+<script type="text/javascript">
+  function footerPosition() {
+    var contentHeight = document.documentElement.scrollHeight,
+        winHeight = window.innerHeight;
+    if(contentHeight <= winHeight) {
+      $('footer').addClass('fixed-bottom');
+    } else {
+      $('footer').removeClass('fixed-bottom');
+    }
+  }
+  footerPosition();
+  $(window).resize(footerPosition);
+</script>
+
+
+  </body>
+</html>

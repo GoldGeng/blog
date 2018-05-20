@@ -149,41 +149,26 @@ var _hmt = _hmt || [];
 </blockquote>
 <ol>
 <li><p>如何居中div,如何居中一个浮动元素?<br>给div设置一个宽度，然后添加margin:0 auto属性</p>
-<p><span class="hljs-tag">div</span><span class="hljs-rules">{<span class="hljs-rule"><span class="hljs-attribute">width</span>:<span class="hljs-value"><span class="hljs-number">200</span>px</span></span>;<span class="hljs-rule"><span class="hljs-attribute">margin</span>:<span class="hljs-value"><span class="hljs-number">0</span> auto</span></span>;<span class="hljs-rule">}</span></span>`</p>
-<p>居中一个浮动元素 </p>
-<p>确定容器的宽高 宽500 高 300 的层 </p>
-<p>设置层的外边距</p>
-<pre class="prettyprint">`<span class="hljs-class">.div</span> <span class="hljs-rules">{
-<span class="hljs-rule"><span class="hljs-attribute">Width</span>:<span class="hljs-value"><span class="hljs-number">500</span>px </span></span>; <span class="hljs-rule"><span class="hljs-attribute">height</span>:<span class="hljs-value"><span class="hljs-number">300</span>px</span></span>;<span class="hljs-rule">//高度可以不设
-<span class="hljs-attribute">Margin</span>:<span class="hljs-value"> -<span class="hljs-number">150</span>px <span class="hljs-number">0</span> <span class="hljs-number">0</span> -<span class="hljs-number">250</span>px</span></span>;
-<span class="hljs-rule"><span class="hljs-attribute">position</span>:<span class="hljs-value">relative</span></span>;<span class="hljs-rule">相对定位
-<span class="hljs-attribute">background-color</span>:<span class="hljs-value">pink</span></span>;<span class="hljs-rule">//方便看效果
-<span class="hljs-attribute">left</span>:<span class="hljs-value"><span class="hljs-number">50</span>%</span></span>;<span class="hljs-rule"><span class="hljs-attribute">top</span>:<span class="hljs-value"><span class="hljs-number">50</span>%</span></span>;
-<span class="hljs-rule">}</span></span>`</pre>
+<p><span class="hljs-tag">div</span><span class="hljs-rules">{<span class="hljs-rule"><span class="hljs-attribute">width</span>:<span class="hljs-value"><span class="hljs-number">200</span>px</span></span>;<span class="hljs-rule"><span class="hljs-attribute">margin</span>:<span class="hljs-value"><span class="hljs-number">0</span> auto</span></span>;<span class="hljs-rule">}</span></span><code>&lt;/pre&gt;
+居中一个浮动元素 
+确定容器的宽高 宽500 高 300 的层 
+设置层的外边距
+&lt;pre class=&quot;prettyprint&quot;&gt;</code><span class="hljs-class">.div</span> <span class="hljs-rules">{<br><span class="hljs-rule"><span class="hljs-attribute">Width</span>:<span class="hljs-value"><span class="hljs-number">500</span>px </span></span>; <span class="hljs-rule"><span class="hljs-attribute">height</span>:<span class="hljs-value"><span class="hljs-number">300</span>px</span></span>;<span class="hljs-rule">//高度可以不设<br><span class="hljs-attribute">Margin</span>:<span class="hljs-value"> -<span class="hljs-number">150</span>px <span class="hljs-number">0</span> <span class="hljs-number">0</span> -<span class="hljs-number">250</span>px</span></span>;<br><span class="hljs-rule"><span class="hljs-attribute">position</span>:<span class="hljs-value">relative</span></span>;<span class="hljs-rule">相对定位<br><span class="hljs-attribute">background-color</span>:<span class="hljs-value">pink</span></span>;<span class="hljs-rule">//方便看效果<br><span class="hljs-attribute">left</span>:<span class="hljs-value"><span class="hljs-number">50</span>%</span></span>;<span class="hljs-rule"><span class="hljs-attribute">top</span>:<span class="hljs-value"><span class="hljs-number">50</span>%</span></span>;<br><span class="hljs-rule">}</span></span></p>
 </li>
-<li><p>浏览器的内核分别是什么?经常遇到的浏览器的兼容性有哪些？原因，解决方法是什么，常用hack的技巧 ？</p>
-<ul>
+<li>浏览器的内核分别是什么?经常遇到的浏览器的兼容性有哪些？原因，解决方法是什么，常用hack的技巧 ？<ul>
 <li>IE浏览器的内核Trident、 Mozilla的Gecko、google的WebKit、Opera内核Presto；</li>
 <li>png24为的图片在iE6浏览器上出现背景，解决方案是做成PNG8.</li>
 <li>浏览器默认的margin和padding不同。解决方案是加一个全局的*{margin:0;padding:0;}来统一。</li>
-<li>IE6双边距bug:块属性标签float后，又有横行的margin情况下，在ie6显示margin比设置的大。    浮动ie产生的双倍距离 #box{ float:left; width:10px; margin:0 0 0 100px;}</li>
+<li>IE6双边距bug:块属性标签float后，又有横行的margin情况下，在ie6显示margin比设置的大。<br>浮动ie产生的双倍距离 #box{ float:left; width:10px; margin:0 0 0 100px;}这种情况之下IE会产生20px的距离，解决方案是在float的标签样式控制中加入——<em>display:inline;将其转化为行内属性。(</em>这个符号只有ie6会识别) </li>
 </ul>
-<p>这种情况之下IE会产生20px的距离，解决方案是在float的标签样式控制中加入 ——<em>display:inline;将其转化为行内属性。(</em>这个符号只有ie6会识别) </p>
-<p>渐进识别的方式，从总体中逐渐排除局部。</p>
-<p>首先，巧妙的使用“\9”这一标记，将IE游览器从所有情况中分离出来。 </p>
-<p>接着，再次使用“+”将IE8和IE7、IE6分离开来，这样IE8已经独立识别。</p>
-<p>css</p>
-<pre class="prettyprint">`<span class="hljs-class">.bb</span><span class="hljs-rules">{
-<span class="hljs-rule"><span class="hljs-attribute">background-color</span>:<span class="hljs-value"><span class="hljs-hexcolor">#f1ee18</span></span></span>;<span class="hljs-comment">/*所有识别*/</span>
-<span class="hljs-rule"><span class="hljs-attribute">.background-color</span>:<span class="hljs-value"><span class="hljs-hexcolor">#00deff</span>\<span class="hljs-number">9</span></span></span>; <span class="hljs-comment">/*IE6、7、8识别*/</span>
-<span class="hljs-rule">+<span class="hljs-attribute">background-color</span>:<span class="hljs-value"><span class="hljs-hexcolor">#a200ff</span></span></span>;<span class="hljs-comment">/*IE6、7识别*/</span>
-<span class="hljs-rule"><span class="hljs-attribute">_background-color</span>:<span class="hljs-value"><span class="hljs-hexcolor">#1e0bd1</span></span></span>;<span class="hljs-comment">/*IE6识别*/</span>
-<span class="hljs-rule">}</span></span>
-
-（<span class="hljs-tag">web</span>前端学习交流群：328058344 禁止闲聊，非喜勿进！） `</pre>
 </li>
 </ol>
-<ul>
+<p>渐进识别的方式，从总体中逐渐排除局部。</p>
+<p>   首先，巧妙的使用“\9”这一标记，将IE游览器从所有情况中分离出来。 </p>
+<p>   接着，再次使用“+”将IE8和IE7、IE6分离开来，这样IE8已经独立识别。</p>
+<p>   css<br>    <pre class="prettyprint">`<span class="hljs-class">.bb</span><span class="hljs-rules">{<br>    <span class="hljs-rule"><span class="hljs-attribute">background-color</span>:<span class="hljs-value"><span class="hljs-hexcolor">#f1ee18</span></span></span>;<span class="hljs-comment">/<em>所有识别</em>/</span><br>    <span class="hljs-rule"><span class="hljs-attribute">.background-color</span>:<span class="hljs-value"><span class="hljs-hexcolor">#00deff</span>\<span class="hljs-number">9</span></span></span>; <span class="hljs-comment">/<em>IE6、7、8识别</em>/</span><br>    <span class="hljs-rule">+<span class="hljs-attribute">background-color</span>:<span class="hljs-value"><span class="hljs-hexcolor">#a200ff</span></span></span>;<span class="hljs-comment">/<em>IE6、7识别</em>/</span><br>    <span class="hljs-rule"><span class="hljs-attribute">_background-color</span>:<span class="hljs-value"><span class="hljs-hexcolor">#1e0bd1</span></span></span>;<span class="hljs-comment">/<em>IE6识别</em>/</span><br>    <span class="hljs-rule">}</span></span></pre></p>
+<pre><code>（&lt;span class=&quot;hljs-tag&quot;&gt;web&lt;/span&gt;前端学习交流群：328058344 禁止闲聊，非喜勿进！） `&lt;/pre&gt;
+</code></pre><ul>
 <li>IE下，可以使用获取常规属性的方法来获取自定义属性，也可以使用getAttribute()获取自定义属性;Firefox下，只能使用getAttribute()获取自定义属性。解决方法:统一通过getAttribute()获取自定义属性。</li>
 <li>IE下，even对象有x，y属性，但是没有pageX，pageY属性；    Firefox下,event对象有pageX,pageY属性,但是没有x,y属性.</li>
 <li>（条件注释）缺点是在IE浏览器下可能会增加额外的HTTP请求数。</li>
@@ -632,6 +617,14 @@ $.fn.parseArray = <span class="hljs-function"><span class="hljs-keyword">functio
 </a>
 </div>
 
+
+<div class="next">
+<a href="/blog/2018/05/15/Javascript构造函数和原型/"  title="Javascript构造函数和原型">
+ <strong>Old:</strong><br/> 
+ <span>Javascript构造函数和原型
+</span>
+</a>
+</div>
 
 </nav>
 
