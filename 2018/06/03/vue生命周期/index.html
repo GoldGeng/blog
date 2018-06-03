@@ -1,0 +1,489 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>vue生命周期 | Hexo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="John Doe">
+    
+    <meta name="description" content="首先，每个Vue实例在被创建之前都要经过一系列的初始化过程,这个过程就是vue的生命周期。首先看一张图吧~这是官方文档上的图片相信大家一定都会很熟悉：
+
+可以看到在vue一整个的生命周期中会有很多钩子函数提供给我们在vue生命周期不同的时刻进行操作, 那么先列出所有的钩子函数，然后我们再一一详解:
+">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/blog/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/blog/img/myLogo.png">
+    <link rel="apple-touch-icon-precomposed" href="/blog/img/myLogo.png">
+    
+
+  
+    <link href="/blog/css/font-awesome.min.css" rel="stylesheet">
+    
+  
+
+    <link rel="stylesheet" href="/blog/css/style.css">
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?d182ed77fc48758bf45a33835ee35745";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+      <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v1/st.js','_st');
+
+  _st('install','.............Add your swiftype userID...............');
+</script>
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/blog/" title="Hexo">Hexo</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+                    <ul>
+					 
+						<li><a href="/blog">首页</a></li>
+					
+						<li><a href="/blog/archives">归档</a></li>
+					
+					<li>
+					
+					</li>
+                <!--<li><div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div></li>-->
+
+				</ul>
+			</nav>	
+</div>
+    </header>
+    <div id="container" class="clearfix">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/blog/2018/06/03/vue生命周期/" title="vue生命周期" itemprop="url">vue生命周期</a>
+  </h1>
+  <p class="article-time">
+    <time datetime="2018-06-03T15:47:09.000Z" itemprop="datePublished">2018-06-03</time>
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title"></strong>
+		<ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-在beforeCreate和created钩子函数之间的生命周期"><span class="toc-number">1.</span> <span class="toc-text">1. 在beforeCreate和created钩子函数之间的生命周期</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-created钩子函数和beforeMount间的生命周期"><span class="toc-number">2.</span> <span class="toc-text">2. created钩子函数和beforeMount间的生命周期</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-beforeMount和mounted-钩子函数间的生命周期"><span class="toc-number">3.</span> <span class="toc-text">3. beforeMount和mounted 钩子函数间的生命周期</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-mounted"><span class="toc-number"></span> <span class="toc-text">4. mounted</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#5-beforeUpdate钩子函数和updated钩子函数间的生命周期"><span class="toc-number">1.</span> <span class="toc-text">5. beforeUpdate钩子函数和updated钩子函数间的生命周期</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-beforeDestroy和destroyed钩子函数间的生命周期"><span class="toc-number">2.</span> <span class="toc-text">6.beforeDestroy和destroyed钩子函数间的生命周期</span></a></li></ol>
+		</div>
+		
+		<p>首先，每个Vue实例在被<strong>创建</strong>之前都要经过一系列的初始化过程,这个过程就是vue的生命周期。首先看一张图吧~这是官方文档上的图片相信大家一定都会很熟悉：</p>
+<p><span class="img-wrap"><img src="/img/bVVORa?w=1200&amp;h=3039" alt="clipboard.png" title="clipboard.png"></span></p>
+<p>可以看到在vue一整个的生命周期中会有很多<strong>钩子函数</strong>提供给我们在vue生命周期不同的时刻进行操作, 那么先列出所有的钩子函数，然后我们再一一详解:</p>
+<ul>
+<li><strong>beforeCreate</strong></li>
+<li><strong>created</strong></li>
+<li><strong>beforeMount</strong></li>
+<li><strong>mounted</strong></li>
+<li><strong>beforeUpdate</strong></li>
+<li><strong>updated</strong></li>
+<li><strong>beforeDestroy</strong></li>
+<li><strong>destroyed</strong></li>
+</ul>
+<p>先来一波代码，各位复制在浏览器中运行，打开console查看就行了：</p>
+<pre><code>&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html lang=&quot;en&quot;&amp;gt;
+&amp;lt;head&amp;gt;
+  &amp;lt;meta charset=&quot;UTF-8&quot;&amp;gt;
+  &amp;lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&amp;gt;
+  &amp;lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&amp;gt;
+  &amp;lt;title&amp;gt;vue生命周期学习&amp;lt;/title&amp;gt;
+  &amp;lt;script src=&quot;https://cdn.bootcss.com/vue/2.4.2/vue.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+  &amp;lt;div id=&quot;app&quot;&amp;gt;
+    &amp;lt;h1&amp;gt;{{message}}&amp;lt;/h1&amp;gt;
+  &amp;lt;/div&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;script&amp;gt;
+  var vm = new Vue({
+    el: &apos;#app&apos;,
+    data: {
+      message: &apos;Vue的生命周期&apos;
+    },
+    beforeCreate: function() {
+      console.group(&apos;------beforeCreate创建前状态------&apos;);
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot; , &quot;el     : &quot; + this.$el); //undefined
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;data   : &quot; + this.$data); //undefined 
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;message: &quot; + this.message) 
+    },
+    created: function() {
+      console.group(&apos;------created创建完毕状态------&apos;);
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;el     : &quot; + this.$el); //undefined
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;data   : &quot; + this.$data); //已被初始化 
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;message: &quot; + this.message); //已被初始化
+    },
+    beforeMount: function() {
+      console.group(&apos;------beforeMount挂载前状态------&apos;);
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;el     : &quot; + (this.$el)); //已被初始化
+      console.log(this.$el);
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;data   : &quot; + this.$data); //已被初始化  
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;message: &quot; + this.message); //已被初始化  
+    },
+    mounted: function() {
+      console.group(&apos;------mounted 挂载结束状态------&apos;);
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;el     : &quot; + this.$el); //已被初始化
+      console.log(this.$el);    
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;data   : &quot; + this.$data); //已被初始化
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;message: &quot; + this.message); //已被初始化 
+    },
+    beforeUpdate: function () {
+      console.group(&apos;beforeUpdate 更新前状态===============》&apos;);
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;el     : &quot; + this.$el);
+      console.log(this.$el);   
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;data   : &quot; + this.$data); 
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;message: &quot; + this.message); 
+    },
+    updated: function () {
+      console.group(&apos;updated 更新完成状态===============》&apos;);
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;el     : &quot; + this.$el);
+      console.log(this.$el); 
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;data   : &quot; + this.$data); 
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;message: &quot; + this.message); 
+    },
+    beforeDestroy: function () {
+      console.group(&apos;beforeDestroy 销毁前状态===============》&apos;);
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;el     : &quot; + this.$el);
+      console.log(this.$el);    
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;data   : &quot; + this.$data); 
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;message: &quot; + this.message); 
+    },
+    destroyed: function () {
+      console.group(&apos;destroyed 销毁完成状态===============》&apos;);
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;el     : &quot; + this.$el);
+      console.log(this.$el);  
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;data   : &quot; + this.$data); 
+      console.log(&quot;%c%s&quot;, &quot;color:red&quot;,&quot;message: &quot; + this.message)
+    }
+  })
+&amp;lt;/script&amp;gt;
+&amp;lt;/html&amp;gt;`&lt;/pre&gt;
+</code></pre><p>   运行后打开console可以看到打印出来内容如下:</p>
+<pre><code>&lt;span class=&quot;img-wrap&quot;&gt;![clipboard.png](/img/bVVT3m?w=938&amp;amp;h=448 &quot;clipboard.png&quot;)&lt;/span&gt;
+</code></pre><p>   可以看到一个vue实例在创建过程中调用的几个生命周期钩子。</p>
+<h5 id="1-在beforeCreate和created钩子函数之间的生命周期"><a href="#1-在beforeCreate和created钩子函数之间的生命周期" class="headerlink" title="1. 在beforeCreate和created钩子函数之间的生命周期"></a><strong>1. 在beforeCreate和created钩子函数之间的生命周期</strong></h5><p>   在这个生命周期之间，进行<strong>初始化事件，进行数据的观测</strong>，可以看到在<strong>created</strong>的时候数据已经和<strong>data属性进行绑定</strong>（放在data中的属性当值发生改变的同时，视图也会改变）。<br>   注意看下：此时还是没有el选项</p>
+<h5 id="2-created钩子函数和beforeMount间的生命周期"><a href="#2-created钩子函数和beforeMount间的生命周期" class="headerlink" title="2. created钩子函数和beforeMount间的生命周期"></a><strong>2. created钩子函数和beforeMount间的生命周期</strong></h5><pre><code>&lt;span class=&quot;img-wrap&quot;&gt;![clipboard.png](/img/bVVUb9?w=571&amp;amp;h=509 &quot;clipboard.png&quot;)&lt;/span&gt;
+</code></pre><p>   在这一阶段发生的事情还是比较多的。</p>
+<p>   首先会判断对象是否有<strong>el选项</strong>。<strong>如果有的话就继续向下编译，如果没有</strong>el选项<strong>，则停止编译，也就意味着停止了生命周期，直到在该vue实例上调用vm.$mount(el)。</strong>此时注释掉代码中:</p>
+<pre><code>&lt;pre&gt;`el: &apos;#app&apos;,`&lt;/pre&gt;
+</code></pre><p>   然后运行可以看到到created的时候就停止了：</p>
+<pre><code>&lt;span class=&quot;img-wrap&quot;&gt;![clipboard.png](/img/bVVUB3?w=764&amp;amp;h=285 &quot;clipboard.png&quot;)&lt;/span&gt;
+</code></pre><p>   如果我们在后面继续调用vm.$mount(el),可以发现代码继续向下执行了</p>
+<pre><code>&lt;pre&gt;`vm.$mount(el) //这个el参数就是挂在的dom接点`&lt;/pre&gt;
+
+&lt;span class=&quot;img-wrap&quot;&gt;![clipboard.png](/img/bVVUCG?w=691&amp;amp;h=441 &quot;clipboard.png&quot;)&lt;/span&gt;
+</code></pre><p>   然后，我们往下看，<strong>template</strong>参数选项的有无对生命周期的影响。<br>   （1）.如果vue实例对象中有template参数选项，则将其作为模板编译成render函数。<br>   （2）.如果没有template选项，则将外部HTML作为模板编译。<br>   （3）.可以看到template中的模板优先级要高于outer HTML的优先级。<br>   修改代码如下, 在HTML结构中增加了一串html，在vue对象中增加了<strong>template选项</strong>：</p>
+<pre><code>&lt;pre&gt;`&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html lang=&quot;en&quot;&amp;gt;
+&amp;lt;head&amp;gt;
+  &amp;lt;meta charset=&quot;UTF-8&quot;&amp;gt;
+  &amp;lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&amp;gt;
+  &amp;lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&amp;gt;
+  &amp;lt;title&amp;gt;vue生命周期学习&amp;lt;/title&amp;gt;
+  &amp;lt;script src=&quot;https://cdn.bootcss.com/vue/2.4.2/vue.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+  &amp;lt;div id=&quot;app&quot;&amp;gt;
+    &amp;lt;!--html中修改的--&amp;gt;
+    &amp;lt;h1&amp;gt;{{message + '这是在outer HTML中的'}}&amp;lt;/h1&amp;gt;
+  &amp;lt;/div&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;script&amp;gt;
+  var vm = new Vue({
+    el: &apos;#app&apos;,
+    template: &quot;&amp;lt;h1&amp;gt;{{message +'这是在template中的'}}&amp;lt;/h1&amp;gt;&quot;, //在vue配置项中修改的
+    data: {
+      message: &apos;Vue的生命周期&apos;
+    }
+&amp;lt;/script&amp;gt;
+&amp;lt;/html&amp;gt;`&lt;/pre&gt;
+</code></pre><p>   执行后的结果可以看到在页面中显示的是：</p>
+<pre><code>&lt;span class=&quot;img-wrap&quot;&gt;![clipboard.png](/img/bVVUJT?w=910&amp;amp;h=118 &quot;clipboard.png&quot;)&lt;/span&gt;
+</code></pre><p>   那么将vue对象中template的选项注释掉后打印如下信息：</p>
+<pre><code>&lt;span class=&quot;img-wrap&quot;&gt;![clipboard.png](/img/bVVUJ3?w=717&amp;amp;h=97 &quot;clipboard.png&quot;)&lt;/span&gt;
+</code></pre><p>   这下就可以想想什么<strong>el的判断</strong>要在template之前了~是因为vue需要通过el找到对应的outer template。</p>
+<p>   在vue对象中还有一个<strong>render函数</strong>，它是以createElement作为参数，然后做渲染操作，而且我们可以直接嵌入JSX.</p>
+<pre><code>&lt;pre&gt;`new Vue({
+    el: &apos;#app&apos;,
+    render: function(createElement) {
+        return createElement(&apos;h1&apos;, &apos;this is createElement&apos;)
+    }
+})`&lt;/pre&gt;
+</code></pre><p>   可以看到页面中渲染的是：</p>
+<pre><code>&lt;span class=&quot;img-wrap&quot;&gt;![clipboard.png](/img/bVVUSo?w=477&amp;amp;h=76 &quot;clipboard.png&quot;)&lt;/span&gt;
+</code></pre><p>   所以综合排名优先级：<br>   render函数选项 &gt; template选项 &gt; outer HTML.</p>
+<h5 id="3-beforeMount和mounted-钩子函数间的生命周期"><a href="#3-beforeMount和mounted-钩子函数间的生命周期" class="headerlink" title="3. beforeMount和mounted 钩子函数间的生命周期"></a><strong>3. beforeMount和mounted 钩子函数间的生命周期</strong></h5><pre><code>&lt;span class=&quot;img-wrap&quot;&gt;![clipboard.png](/img/bVVUTK?w=451&amp;amp;h=198 &quot;clipboard.png&quot;)&lt;/span&gt;
+</code></pre><p>   可以看到此时是给vue实例对象添加<strong>$el成员</strong>，并且替换掉挂在的DOM元素。因为在之前console中打印的结果可以看到<strong>beforeMount</strong>之前el上还是undefined。</p>
+<h4 id="4-mounted"><a href="#4-mounted" class="headerlink" title="4. mounted"></a><strong>4. mounted</strong></h4><p>   注意看下面截图：</p>
+<pre><code>&lt;span class=&quot;img-wrap&quot;&gt;![clipboard.png](/img/bVVUYC?w=424&amp;amp;h=274 &quot;clipboard.png&quot;)&lt;/span&gt;
+</code></pre><p>   在mounted之前h1中还是通过<strong></strong>进行占位的，因为此时还有挂在到页面上，还是JavaScript中的虚拟DOM形式存在的。在mounted之后可以看到h1中的内容发生了变化。</p>
+<h5 id="5-beforeUpdate钩子函数和updated钩子函数间的生命周期"><a href="#5-beforeUpdate钩子函数和updated钩子函数间的生命周期" class="headerlink" title="5. beforeUpdate钩子函数和updated钩子函数间的生命周期"></a><strong>5. beforeUpdate钩子函数和updated钩子函数间的生命周期</strong></h5><pre><code>&lt;span class=&quot;img-wrap&quot;&gt;![clipboard.png](/img/bVVU0E?w=558&amp;amp;h=295 &quot;clipboard.png&quot;)&lt;/span&gt;
+</code></pre><p>   当vue发现data中的数据发生了改变，会<strong>触发对应组件的重新渲染</strong>，先后调用<strong>beforeUpdate</strong>和<strong>updated</strong>钩子函数。我们在console中输入：</p>
+<pre><code>&lt;pre&gt;`vm.message = &apos;触发组件更新&apos;
+</code></pre><p>发现触发了组件的更新：</p>
+<p><span class="img-wrap"><img src="/img/bVVU55?w=500&amp;h=356" alt="clipboard.png" title="clipboard.png"></span></p>
+<h5 id="6-beforeDestroy和destroyed钩子函数间的生命周期"><a href="#6-beforeDestroy和destroyed钩子函数间的生命周期" class="headerlink" title="6.beforeDestroy和destroyed钩子函数间的生命周期"></a><strong>6.beforeDestroy和destroyed钩子函数间的生命周期</strong></h5><p><span class="img-wrap"><img src="/img/bVVU6C?w=383&amp;h=368" alt="clipboard.png" title="clipboard.png"></span></p>
+<p><strong>beforeDestroy</strong>钩子函数在实例销毁之前调用。在这一步，实例仍然完全可用。<br><strong>destroyed</strong>钩子函数在Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2018/06/03/vue生命周期/" data-title="vue生命周期 | Hexo" data-tsina="" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/blog/2018/05/23/vue-router-基本使用/"  title="vue-router 基本使用">
+ <strong>Old:</strong><br/> 
+ <span>vue-router 基本使用
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	
+	<div class="ds-thread" data-title="vue生命周期" data-thread-key="vue生命周期" data-author-key="John Doe" data-url="http://yoursite.com/post/vue生命周期"></div>
+	
+</section>
+
+
+</div>  
+    </div>
+    <footer><div id="footer" >
+	<div class="copyright">
+		<span>Powered by <a href="https://github.com/hexojs/hexo">Hexo</a> and theme by 
+		<a href="https://github.com/levonlin/Tinnypp">Tinnypp</a>.</span>
+		
+			<span>© GoldGeng</span>
+		
+	<div>
+</div></footer>
+    <script src="/blog/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  //back to top
+  function backToTop(){
+    var buttonHTML = $("<a href=\"#top\" id=\"back-top\">" + "<span>Back to Top</span></a>");
+    buttonHTML.appendTo($("body"));
+    var buttonToTop = $("#back-top");
+    // hide #back-top first
+    buttonToTop.hide();
+
+    // fade in #back-top
+    $(function() {
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                buttonToTop.fadeIn();
+            } else {
+                buttonToTop.fadeOut();
+            }
+        });
+        // scroll body to 0px on click
+        buttonToTop.click(function() {
+            $('body,html').animate({
+                scrollTop: 0
+            }, 800);
+            return false;
+        });
+    });
+  }
+  backToTop();
+
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      ta = $('#toc.toc-aside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+        
+    }
+  });
+
+  var show = true;
+  c.click(function(){
+    if(show == true){
+        a.addClass('fadeOut').css('display', 'none');
+        ta.css('display', 'block').addClass('fadeIn');
+        m.addClass('moveMain');  
+    }else{
+        a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');     
+        ta.css('display', 'none'); 
+        m.removeClass('moveMain');
+        $('#toc.toc-aside').css('display', 'none');
+    }
+    show = !show;
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,240-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tinnypp"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';    //change to ds.src = '/blog/js/embed.js'; to add useragent for duoshuo
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+<script type="text/javascript">
+  function footerPosition() {
+    var contentHeight = document.documentElement.scrollHeight,
+        winHeight = window.innerHeight;
+    if(contentHeight <= winHeight) {
+      $('footer').addClass('fixed-bottom');
+    } else {
+      $('footer').removeClass('fixed-bottom');
+    }
+  }
+  footerPosition();
+  $(window).resize(footerPosition);
+</script>
+
+
+  </body>
+</html>
